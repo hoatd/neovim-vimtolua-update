@@ -1,51 +1,33 @@
 -- lua/ui.lua
-
 -- =============================
--- Statusline / Command Line / UI
+-- Statusline, numbers, folds, colors, popup menus
 -- =============================
-vim.o.laststatus = 3              -- global statusline (Neovim 0.7+)
-vim.o.showmode = true             -- show current mode (insert, replace, etc.)
-vim.o.showcmd = true              -- show incomplete commands
-vim.o.ruler = true                -- show cursor position
-vim.o.cmdheight = 1               -- command-line height
-vim.wo.signcolumn = "yes"         -- always show sign column
-vim.wo.cursorline = true          -- highlight current line
 
--- Line numbers
+-- Statusline / command line
+vim.o.laststatus = 3
+vim.o.showmode = true
+vim.o.showcmd = true
+vim.o.ruler = true
+vim.wo.signcolumn = "yes"
+vim.wo.cursorline = true
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.numberwidth = 3
-
--- Title bar
 vim.o.title = true
 vim.o.titlestring = "%t - neovim"
 
--- Display options
-vim.o.display = "lastline,uhex"   -- show last line and unprintable chars as hex
-
--- Session options
-vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
-
--- Folding
-vim.o.foldenable = false           -- disable folding by default
-
--- Completion / pop-up menu
-vim.o.completeopt = "menu,menuone,noselect"
-vim.o.pumblend = 10
+-- Session / splits / tabs
+vim.opt.sessionoptions = "buffers,curdir,folds,help,localoptions,options,resize,tabpages,terminal,winpos,winsize"
+vim.o.tabpagemax = 50
+vim.o.showtabline = 2
+vim.o.splitbelow = true
+vim.o.splitright = true
 
 -- Colors
 vim.o.termguicolors = true
 vim.cmd([[highlight PmenuSel guibg=#44475a]])
 
--- Bell / visual feedback
-vim.o.visualbell = true
-vim.o.belloff = "all"
-vim.o.errorbells = false
-
--- Cursor shapes (modern Lua way)
-vim.opt.guicursor = table.concat({
-  "n-v-c:block-Cursor/lCursor",
-  "i-ci:ver25-CursorInsert",
-  "r-cr:hor20-CursorReplace",
-  "o:hor50",
-}, ",")
+-- Listchars / Fillchars (tweak later with tabby/lualine)
+vim.o.list = true
+vim.o.listchars = "eol:↲,trail:¤,tab:→\\ ,space:˰,nbsp:␣,precedes:«,extends:»"
+vim.o.fillchars = "eob:~,horiz:━,vert:┃,fold: ,foldopen:◣,foldclose:◥,diff:-"
