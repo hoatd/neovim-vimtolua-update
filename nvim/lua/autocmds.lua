@@ -57,7 +57,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = utils.augroup("quickfix"),
   pattern = "qf",
   callback = function()
-    vim.cmd("wincmd J")
+    vim.api.nvim_command("wincmd J")
   end,
 })
 
@@ -68,7 +68,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
   group = utils.augroup("checktime"),
   callback = function()
     if vim.fn.mode() ~= "c" and vim.bo.buftype ~= "nofile" then
-      vim.cmd("checktime")
+      vim.api.nvim_command("checktime")
     end
   end,
 })
@@ -89,7 +89,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.wo.number = false
     vim.wo.relativenumber = false
     vim.wo.cursorline = false
-    vim.cmd("startinsert")
+    vim.api.nvim_feedkeys("i", "n", false)
   end,
 })
 
@@ -109,14 +109,36 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- ============================================================
--- Colorscheme-specific tweaks (Dracula PmenuSel)
+-- Colorscheme-specific tweaks (Dracula)
 -- ============================================================
 vim.api.nvim_create_autocmd("ColorScheme", {
   group = utils.augroup("colors"),
   pattern = "*",
   callback = function()
-    -- Only apply if you actually use Dracula (or remove if not needed)
-    vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#44475a", fg = "#ffffff" })
+    --  Custom PmenuSel
+    if vim.g.colors_name ~= "dracula" then
+      return
+    end
+    vim.api.nvim_set_hl(0, "PmenuSel", {
+      bg = "#44475a",
+      fg = "#ffffff",
+    })
+    -- Custom dracula-like highlights for better contrast with Tabby
+    local ok, _ = pcall(require, "tabby")
+    if not ok then
+      return
+    end
+    vim.api.nvim_set_hl(0, "TabLineSel", {
+      bg = "#44475a",
+      fg = "#f8f8f2",
+    })
+    vim.api.nvim_set_hl(0, "TabLine", {
+      bg = "#282a36",
+      fg = "#6272a4",
+    })
+    vim.api.nvim_set_hl(0, "TabLineFill", {
+      bg = "#1e1f29",
+    })
   end,
-  desc = "Dracula-style PmenuSel",
+  desc = "Dracula-style PmenuSel and Tabby ",
 })

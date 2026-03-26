@@ -104,8 +104,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   group = utils.augroup("large_file"),
   callback = function(args)
     if vim.fn.getfsize(vim.api.nvim_buf_get_name(args.buf)) > 10 * 1024 * 1024 then
-      vim.cmd("TSBufDisable highlight")
-      vim.cmd("TSBufDisable indent")
+      vim.treesitter.stop(0, "highlight")
+      vim.treesitter.stop(0, "indent")
       vim.bo[args.buf].syntax = "on"
       vim.wo[0][0].cursorline = false
       vim.wo[0][0].relativenumber = false
