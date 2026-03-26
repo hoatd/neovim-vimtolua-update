@@ -1,4 +1,4 @@
--- lua/treesitter.lua
+-- lua/config/treesitter.lua
 
 local utils = require("utils")
 
