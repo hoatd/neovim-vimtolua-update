@@ -3,12 +3,7 @@
 require("config.settings")
 require("config.keymaps")
 require("config.autocmds")
-
--- Load plugins
 require("config.plugins").setup()
-
--- UI tweaks
-require("config.ui")
-
+require("config.ui").setup()
 require("treesitter")
 require("lsp")
