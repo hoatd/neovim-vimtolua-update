@@ -1,22 +1,27 @@
 -- lua/config/plugins.lua
+
 local M = {}
+
 function M.setup()
+  -- Register plugins
   vim.pack.add({
-    "https://github.com/Mofiqul/dracula.nvim",       -- Theme
+    "https://github.com/Mofiqul/dracula.nvim",        -- Theme
     "https://github.com/nvim-tree/nvim-web-devicons", -- Icons
     "https://github.com/nvim-lualine/lualine.nvim",   -- Statusline
-    "https://github.com/nanozuki/tabby.nvim",        -- Tabline
-    { -- nvim-treesitter
+    "https://github.com/nanozuki/tabby.nvim",         -- Tabline
+    {                                                 -- nvim-treesitter
       src = "https://github.com/nvim-treesitter/nvim-treesitter",
       branch = "main",
       run = ":TSUpdate"
     },
-    { -- nvim-treesitter-textobjects
+    {                                                 -- nvim-treesitter-textobjects
       src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       version = "main",
     },
   })
   
+  -- Plugin setups
+  --
   -- Dracula colorscheme
   if pcall(require, "dracula") then
     require("dracula").setup({
@@ -24,6 +29,7 @@ function M.setup()
       transparent_bg     = true,
       italic_comment     = true,
     })
+    vim.opt.termguicolors = true
     vim.cmd.colorscheme("dracula")
   end
   

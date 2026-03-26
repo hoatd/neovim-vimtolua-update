@@ -108,37 +108,3 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- ============================================================
--- Colorscheme-specific tweaks (Dracula)
--- ============================================================
-vim.api.nvim_create_autocmd("ColorScheme", {
-  group = utils.augroup("colors"),
-  pattern = "*",
-  callback = function()
-    --  Custom PmenuSel
-    if vim.g.colors_name ~= "dracula" then
-      return
-    end
-    vim.api.nvim_set_hl(0, "PmenuSel", {
-      bg = "#44475a",
-      fg = "#ffffff",
-    })
-    -- Custom dracula-like highlights for better contrast with Tabby
-    local ok, _ = pcall(require, "tabby")
-    if not ok then
-      return
-    end
-    vim.api.nvim_set_hl(0, "TabLineSel", {
-      bg = "#44475a",
-      fg = "#f8f8f2",
-    })
-    vim.api.nvim_set_hl(0, "TabLine", {
-      bg = "#282a36",
-      fg = "#6272a4",
-    })
-    vim.api.nvim_set_hl(0, "TabLineFill", {
-      bg = "#1e1f29",
-    })
-  end,
-  desc = "Dracula-style PmenuSel and Tabby ",
-})

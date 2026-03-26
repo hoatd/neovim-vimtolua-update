@@ -183,7 +183,6 @@ local ui_opts = {
   showtabline     = 2,              -- Always show tabline
   splitbelow     = true,            -- Horizontal split below
   splitright     = true,            -- Vertical split right
-  termguicolors  = true,            -- True color support
   list           = true,            -- Show invisible characters
   listchars = {
     eol      = "↲",                -- End-of-line
