@@ -1,33 +1,47 @@
 -- lua/ui.lua
--- =============================
--- Statusline, numbers, folds, colors, popup menus
--- =============================
 
--- Statusline / command line
-vim.o.laststatus = 3
-vim.o.showmode = true
-vim.o.showcmd = true
-vim.o.ruler = true
-vim.wo.signcolumn = "yes"
-vim.wo.cursorline = true
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.numberwidth = 3
-vim.o.title = true
-vim.o.titlestring = "%t - neovim"
+-- Dracula colorscheme
+require("dracula").setup({
+  show_end_of_buffer = true,
+  transparent_bg     = true,
+  italic_comment     = true,
+})
+vim.cmd("colorscheme dracula")
 
--- Session / splits / tabs
-vim.opt.sessionoptions = "buffers,curdir,folds,help,localoptions,options,resize,tabpages,terminal,winpos,winsize"
-vim.o.tabpagemax = 50
-vim.o.showtabline = 2
-vim.o.splitbelow = true
-vim.o.splitright = true
+-- Devicons
+require("nvim-web-devicons").setup({
+  default = true,
+})
 
--- Colors
-vim.o.termguicolors = true
-vim.cmd([[highlight PmenuSel guibg=#44475a]])
+-- Lualine
+require("lualine").setup({})
 
--- Listchars / Fillchars (tweak later with tabby/lualine)
-vim.o.list = true
-vim.o.listchars = "eol:↲,trail:¤,tab:→\\ ,space:˰,nbsp:␣,precedes:«,extends:»"
-vim.o.fillchars = "eob:~,horiz:━,vert:┃,fold: ,foldopen:◣,foldclose:◥,diff:-"
+-- Tabby
+-- Custom dracula-like highlights for better contrast with Tabby
+vim.cmd([[
+  highlight TabLineSel  guibg=#44475a guifg=#f8f8f2
+  highlight TabLine     guibg=#282a36 guifg=#6272a4
+  highlight TabLineFill guibg=#1e1f29
+]])
+
+require("tabby").setup({
+  preset = "active_wins_at_tail",
+--  option = {
+--    theme = {
+--      fill = 'TabLineFill',       -- tabline background
+--      head = 'TabLine',           -- head element highlight
+--      current_tab = 'TabLineSel', -- current tab label highlight
+--      tab = 'TabLine',            -- other tab label highlight
+--      win = 'TabLineSel',            -- window highlight
+--      tail = 'TabLine',           -- tail element highlight
+--    },
+--    nerdfont      = true,
+--    lualine_theme = nil,
+--    tab_name = {
+--      name_fallback = function(tabid) return tabid end,
+--    },
+--    buf_name = {
+--      mode = 'unique', -- or 'relative', 'tail', 'shorten'
+--    },
+--  },
+})

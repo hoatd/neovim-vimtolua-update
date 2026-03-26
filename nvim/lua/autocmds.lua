@@ -1,48 +1,122 @@
 -- lua/autocmds.lua
--- =============================
--- Autocommands
--- =============================
 
-local api = vim.api
+local utils = require("utils")
 
--- Toggle relative number in insert mode
-api.nvim_create_autocmd({"InsertEnter"}, { command = "set norelativenumber" })
-api.nvim_create_autocmd({"InsertLeave"}, { command = "set relativenumber" })
-
--- Toggle cursorline on focused window
-api.nvim_create_autocmd({"WinEnter"}, { command = "set cursorline" })
-api.nvim_create_autocmd({"WinLeave"}, { command = "set nocursorline" })
-
--- Highlight yanked text
-api.nvim_create_autocmd("TextYankPost", {
+-- ============================================================
+-- Relative number: only in normal mode (except diff mode)
+-- ============================================================
+vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+  group = utils.augroup("number"),
   callback = function()
-    vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
-  end
+    vim.wo.relativenumber = false
+  end,
 })
 
--- Quickfix always at bottom
-api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+  group = utils.augroup("number"),
+  callback = function()
+    vim.wo.relativenumber = not vim.wo.diff
+  end,
+})
+
+-- ============================================================
+-- Cursorline: only on focused window (respect diff mode)
+-- ============================================================
+vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained" }, {
+  group = utils.augroup("cursorline"),
+  callback = function()
+    vim.wo.cursorline = not vim.wo.diff
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "WinLeave", "FocusLost" }, {
+  group = utils.augroup("cursorline"),
+  callback = function()
+    vim.wo.cursorline = false
+  end,
+})
+
+-- ============================================================
+-- Highlight yanked text
+-- ============================================================
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = utils.augroup("yank"),
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "IncSearch",
+      timeout = 200,
+      on_visual = true,
+    })
+  end,
+})
+
+-- ============================================================
+-- Quickfix: always open at bottom, full width
+-- ============================================================
+vim.api.nvim_create_autocmd("FileType", {
+  group = utils.augroup("quickfix"),
   pattern = "qf",
   callback = function()
     vim.cmd("wincmd J")
-  end
+  end,
 })
 
--- Auto-read files changed externally
-api.nvim_create_autocmd({"FocusGained","BufEnter","CursorHold","CursorHoldI"}, {
-  command = "if mode() != 'c' | checktime | endif"
+-- ============================================================
+-- Auto-reload files changed externally
+-- ============================================================
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  group = utils.augroup("checktime"),
+  callback = function()
+    if vim.fn.mode() ~= "c" and vim.bo.buftype ~= "nofile" then
+      vim.cmd("checktime")
+    end
+  end,
 })
 
--- Notification on reload after external file changes
-api.nvim_create_autocmd("FileChangedShellPost", {
-  command = [[echohl WarningMsg | echo "File has changed on disk. Buffer reloaded." | echohl None]]
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  group = utils.augroup("checktime"),
+  callback = function()
+    vim.notify("File changed on disk. Buffer reloaded.", vim.log.levels.WARN)
+  end,
 })
 
--- Terminal buffer settings
-api.nvim_create_autocmd("BufEnter", {
+-- ============================================================
+-- Terminal behavior
+-- ============================================================
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = utils.augroup("terminal"),
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+    vim.wo.cursorline = false
+    vim.cmd("startinsert")
+  end,
+})
+
+-- ============================================================
+-- Filetype-specific settings (Lua / Vim scripts)
+-- Better than old pattern-based autocmd
+-- ============================================================
+vim.api.nvim_create_autocmd("FileType", {
+  group = utils.augroup("indent"),
+  pattern = { "lua", "vim", "json", "html", "javascript" },
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
+-- ============================================================
+-- Colorscheme-specific tweaks (Dracula PmenuSel)
+-- ============================================================
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = utils.augroup("colors"),
   pattern = "*",
-  command = "if &buftype == 'terminal' | startinsert | endif"
+  callback = function()
+    -- Only apply if you actually use Dracula (or remove if not needed)
+    vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#44475a", fg = "#ffffff" })
+  end,
+  desc = "Dracula-style PmenuSel",
 })
-
--- Terminal keymap to exit insert mode
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
