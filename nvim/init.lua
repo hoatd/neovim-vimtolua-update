@@ -1,9 +1,9 @@
 -- Load Lua modules
 
-require("settings")
-require("plugins")
-require("ui")
+require("config.settings")
+require("config.keymaps")
+require("config.autocmds")
+require("config.plugins").setup()
+require("config.ui")
 require("treesitter")
-require("keymaps")
-require("autocmds")
 require("lsp")
