@@ -147,7 +147,6 @@ end
 function M.setup()
   setup_mason()
   setup_servers()
-  setup_keymaps()
   setup_trouble()
 end
 
