@@ -52,6 +52,7 @@ function M.setup_mason()
 end
 
 local function on_attach(client, bufnr)
+  require("config.diagnostics").setup(bufnr)
   vim.notify("LSP started for " .. utils.get_buffer_names(bufnr, {name = "[No Name]"}).name .. " (" .. client.name .. ")", vim.log.levels.INFO, { timeout = 2000, replace = "silent" })
 end
 

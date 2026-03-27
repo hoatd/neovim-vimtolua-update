@@ -386,34 +386,3 @@ apply_options(session_opts)
 vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 
--- ============================================================================
--- Diagnostic config
--- ============================================================================
-vim.tbl_map(function(e)
-  vim.fn.sign_define(e.name, { text = e.text, texthl = e.name, numhl = "" })
-end, {
-  { name = "DiagnosticSignError", text = "✖" },
-  { name = "DiagnosticSignWarn",  text = "⚠" },
-  { name = "DiagnosticSignHint",  text = "➤" },
-  { name = "DiagnosticSignInfo",  text = "ℹ" },
-})
-vim.diagnostic.config({
-  virtual_text = {
-    prefix = "●",         -- Dot prefix
-    spacing = 2,          -- Space between text and prefix
-    severity = { min = vim.diagnostic.severity.HINT }, -- Show all levels
-  },
-  signs = true,            -- Show signs in signcolumn
-  underline = true,        -- Underline problematic text
-  update_in_insert = false,-- Do not update diagnostics while typing
-  severity_sort = true,    -- Sort by severity: Error > Warn > Info > Hint
-  float = {
-    border = "rounded",    -- Rounded border
-    source = "always",     -- Show source in float
-    prefix = "",           -- No extra prefix
-    header = "",           -- No header
-    focusable = false,     -- Non-focusable float
-    style = "minimal",     -- Minimal style to blend with UI
-    winblend = 15,         -- Match popup transparency
-  },
-})
