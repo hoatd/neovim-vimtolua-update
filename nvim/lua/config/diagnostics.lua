@@ -67,7 +67,7 @@ end
 
 --- Setup buffer-local diagnostic keymaps
 -- @param bufnr buffer number
-local function setup_keymaps(bufnr)
+function M.setup_keymaps(bufnr)
   bufnr = bufnr or 0
   local opts = { silent = true, buffer = bufnr }
 
@@ -120,9 +120,8 @@ end
 
 --- Main setup function
 -- @param bufnr optional, for buffer-local keymaps
-function M.setup(bufnr)
+function M.setup()
   setup_highlights()
-  setup_keymaps(bufnr)
 end
 
 return M

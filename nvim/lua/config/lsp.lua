@@ -3,6 +3,7 @@
 local M = {}
 
 local utils = require("utils")
+local diagnostics = require("config.diagnostics")
 
 local map = vim.keymap.set
 
@@ -112,7 +113,7 @@ local function setup_keymaps(bufnr)
 end
 
 local function on_attach(client, bufnr)
-  require("config.diagnostics").setup(bufnr)
+  diagnostics.setup_keymaps(bufnr)
   setup_keymaps(bufnr)
   vim.notify(
     "LSP started for "
