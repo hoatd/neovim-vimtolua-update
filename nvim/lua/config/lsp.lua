@@ -49,9 +49,14 @@ function M.setup_mason()
   }) end
 end
 
+local function on_attach(client, bufnr)
+  vim.notify("LSP started: " .. client.name, vim.log.levels.INFO)
+end
+
 function M.setup_servers()
   for _, server_name in ipairs(M.servers) do
     local config = M.server_configs[server_name] or {}
+    config.on_attach = on_attach
     vim.lsp.config(server_name, config)
     vim.lsp.enable(server_name)
   end
