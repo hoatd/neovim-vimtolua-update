@@ -55,7 +55,7 @@ local function setup_highlights()
     severity_sort = true, -- Sort by severity: Error > Warn > Info > Hint
     float = {
       border = "rounded", -- Rounded border
-      source = "always", -- Show source in float
+      source = true, -- Show source in float
       prefix = "", -- No extra prefix
       header = "", -- No header
       focusable = false, -- Non-focusable float
