@@ -34,26 +34,38 @@ M.server_configs = {
 
 function M.setup_mason()
   local ok, mason = pcall(require, "mason")
-  if ok then mason.setup({
-    ui = {
-      icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗",
+  if ok then
+    mason.setup({
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
+          package_uninstalled = "✗",
+        },
       },
-    },
-  }) end
+    })
+  end
 
   local ok2, mason_lsp = pcall(require, "mason-lspconfig")
-  if ok2 then mason_lsp.setup({
-    ensure_installed = M.servers,
-    automatic_installation = true,
-  }) end
+  if ok2 then
+    mason_lsp.setup({
+      ensure_installed = M.servers,
+      automatic_installation = true,
+    })
+  end
 end
 
 local function on_attach(client, bufnr)
   require("config.diagnostics").setup(bufnr)
-  vim.notify("LSP started for " .. utils.get_buffer_names(bufnr, {name = "[No Name]"}).name .. " (" .. client.name .. ")", vim.log.levels.INFO, { timeout = 2000, replace = "silent" })
+  vim.notify(
+    "LSP started for "
+      .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
+      .. " ("
+      .. client.name
+      .. ")",
+    vim.log.levels.INFO,
+    { timeout = 2000, replace = "silent" }
+  )
 end
 
 function M.setup_servers()
