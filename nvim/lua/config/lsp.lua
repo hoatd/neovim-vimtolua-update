@@ -122,7 +122,7 @@ local function on_attach(client, bufnr)
       .. client.name
       .. ")",
     vim.log.levels.INFO,
-    { timeout = 2000, replace = "silent" }
+    { timeout = 2000, replace = true }
   )
 end
 
