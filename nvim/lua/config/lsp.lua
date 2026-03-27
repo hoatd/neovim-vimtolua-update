@@ -5,8 +5,6 @@ local M = {}
 local utils = require("utils")
 local diagnostics = require("config.diagnostics")
 
-local map = vim.keymap.set
-
 local servers = {
   "lua_ls",
   -- "pyright",
@@ -61,6 +59,7 @@ end
 local function setup_keymaps(bufnr)
   bufnr = bufnr or 0
   local opts = { silent = true, buffer = bufnr }
+  local map = vim.keymap.set
 
   map(
     "n",

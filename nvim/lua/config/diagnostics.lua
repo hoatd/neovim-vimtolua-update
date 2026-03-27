@@ -2,7 +2,6 @@
 
 local M = {}
 
-local map = vim.keymap.set
 local diag = vim.diagnostic
 
 --- Setup default diagnostic highlights (virtual text, signs)
@@ -70,6 +69,7 @@ end
 function M.setup_keymaps(bufnr)
   bufnr = bufnr or 0
   local opts = { silent = true, buffer = bufnr }
+  local map = vim.keymap.set
 
   map("n", "]d", function()
     vim.diagnostic.jump({ count = 1, float = true })

@@ -9,8 +9,6 @@ local ts_move = require("nvim-treesitter-textobjects.move")
 local ts_swap = require("nvim-treesitter-textobjects.swap")
 local ts_select = require("nvim-treesitter-textobjects.select")
 
-local map = vim.keymap.set
-
 local parsers = {
   "bash",
   "c",
@@ -46,6 +44,7 @@ local parsers = {
 local function setup_keymaps(bufnr)
   bufnr = bufnr or 0
   local opts = { silent = true, buffer = bufnr }
+  local map = vim.keymap.set
 
   -- ============================================================
   -- Treesitter-aware movements
