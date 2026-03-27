@@ -66,16 +66,27 @@ require("nvim-treesitter").setup {
   },
 }
 
+-- ============================================================
 -- Folding & indentation per-buffer setup
+-- ============================================================
 vim.api.nvim_create_autocmd({ "FileType", "BufReadPost" }, {
   group = utils.augroup("treesitter"),
   callback = function(args)
     local buf = args.buf
     local ft = vim.bo[buf].filetype
     local lang = vim.treesitter.language.get_lang(ft)
+
+    -- Skip if no language mapping exists
     if not lang then
       return
     end
+
+    -- Check if parser is available before starting
+    local ok, parser = pcall(vim.treesitter.require_language, lang)
+    if not ok or not parser then
+      return
+    end
+
     vim.treesitter.start(buf, lang)
     vim.wo.foldmethod = "expr"
     vim.wo.foldexpr   = "v:lua.vim.treesitter.foldexpr()"

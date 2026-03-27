@@ -18,8 +18,12 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       version = "main",
     },
+    "https://github.com/neovim/nvim-lspconfig",      -- Core LSP configurations
+    "https://github.com/williamboman/mason.nvim",    -- Optional LSP installer
+    "https://github.com/williamboman/mason-lspconfig.nvim",
+    "https://github.com/folke/trouble.nvim",         -- Optional diagnostics UI
   })
-  
+
   -- Plugin setups
   --
   -- Dracula colorscheme
@@ -33,7 +37,7 @@ function M.setup()
     vim.cmd.colorscheme("dracula")
     require("config.ui").hl_dracula()
   end
-  
+
   -- Devicons
   if pcall(require, "nvim-web-devicons") then
     require("nvim-web-devicons").setup({
@@ -45,7 +49,7 @@ function M.setup()
   if pcall(require, "lualine") then
     require("lualine").setup({})
   end
-  
+
   -- Tabby
   if pcall(require, "tabby") then
     require("tabby").setup({
