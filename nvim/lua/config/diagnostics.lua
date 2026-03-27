@@ -28,40 +28,6 @@ local function setup_highlights()
     "DiagnosticVirtualTextHint",
     { fg = "#bd93f9", italic = true, nocombine = true }
   )
-
-  -- Define signs
-  vim.tbl_map(function(e)
-    vim.fn.sign_define(e.name, { text = e.text, texthl = e.name, numhl = "" })
-  end, {
-    { name = "DiagnosticSignError", text = "✖" },
-    { name = "DiagnosticSignWarn", text = "⚠" },
-    { name = "DiagnosticSignHint", text = "➤" },
-    { name = "DiagnosticSignInfo", text = "ℹ" },
-  })
-
-  -- Global diagnostic config
-  diag.config({
-    -- virtual_text = false,  -- Disable virtual text entirely, <leader>e - Open float, ]d / [d - Next/previous diagnostic
-    virtual_text = {
-      prefix = "●", -- Dot prefix
-      spacing = 2, -- Space between text and prefix
-      severity = { min = vim.diagnostic.severity.HINT }, -- Show all levels
-      virt_text_pos = "eol", -- End of line
-    },
-    signs = true, -- Show signs in signcolumn
-    underline = true, -- Underline problematic text
-    update_in_insert = false, -- Do not update diagnostics while typing
-    severity_sort = true, -- Sort by severity: Error > Warn > Info > Hint
-    float = {
-      border = "rounded", -- Rounded border
-      source = true, -- Show source in float
-      prefix = "", -- No extra prefix
-      header = "", -- No header
-      focusable = false, -- Non-focusable float
-      style = "minimal", -- Minimal style to blend with UI
-      winblend = 15, -- Match popup transparency
-    },
-  })
 end
 
 --- Setup buffer-local diagnostic keymaps
@@ -121,6 +87,50 @@ end
 --- Main setup function
 -- @param bufnr optional, for buffer-local keymaps
 function M.setup()
+  diag.config({
+    underline = true, -- Underline problematic text
+    virtual_text = {
+      prefix = function(diagnostic)
+        local icons = {
+          [vim.diagnostic.severity.ERROR] = "", -- Error
+          [vim.diagnostic.severity.WARN] = "", -- Warning
+          [vim.diagnostic.severity.INFO] = "", -- Info
+          [vim.diagnostic.severity.HINT] = "", -- Hint
+        }
+        return icons[diagnostic.severity] or "●"
+      end,
+      spacing = 2, -- Space between text and prefix
+      severity = { min = vim.diagnostic.severity.HINT }, -- Show all levels
+      virt_text_pos = "eol", -- End of line
+    },
+
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = "", -- Error
+        [vim.diagnostic.severity.WARN] = "", -- Warning
+        [vim.diagnostic.severity.INFO] = "", -- Info
+        [vim.diagnostic.severity.HINT] = "", -- Hint
+      },
+      linehl = {
+        [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+      },
+      numhl = {
+        [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+        [vim.diagnostic.severity.WARN] = "WarningMsg",
+      },
+    },
+    float = {
+      border = "rounded", -- Rounded border
+      source = true, -- Show source in float
+      prefix = "", -- No extra prefix
+      header = "", -- No header
+      focusable = false, -- Non-focusable float
+      style = "minimal", -- Minimal style to blend with UI
+      winblend = 15, -- Match popup transparency
+    },
+    update_in_insert = false, -- Do not update diagnostics while typing
+    severity_sort = true, -- Sort by severity: Error > Warn > Info > Hint
+  })
   setup_highlights()
 end
 
