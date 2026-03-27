@@ -84,6 +84,13 @@ function M.setup_keymaps(bufnr)
   )
 end
 
+local diagnostic_map = {
+  [vim.diagnostic.severity.ERROR] = { icon = "", hl = "DiagnosticError" },
+  [vim.diagnostic.severity.WARN] = { icon = "", hl = "DiagnosticWarn" },
+  [vim.diagnostic.severity.INFO] = { icon = "", hl = "DiagnosticInfo" },
+  [vim.diagnostic.severity.HINT] = { icon = "", hl = "DiagnosticHint" },
+}
+
 --- Main setup function
 -- @param bufnr optional, for buffer-local keymaps
 function M.setup()
@@ -91,13 +98,7 @@ function M.setup()
     underline = true, -- Underline problematic text
     virtual_text = {
       prefix = function(diagnostic)
-        local icons = {
-          [vim.diagnostic.severity.ERROR] = "", -- Error
-          [vim.diagnostic.severity.WARN] = "", -- Warning
-          [vim.diagnostic.severity.INFO] = "", -- Info
-          [vim.diagnostic.severity.HINT] = "", -- Hint
-        }
-        return icons[diagnostic.severity] or "●"
+        return diagnostic_map[diagnostic.severity].icon or "●"
       end,
       spacing = 2, -- Space between text and prefix
       severity = { min = vim.diagnostic.severity.HINT }, -- Show all levels
@@ -105,12 +106,9 @@ function M.setup()
     },
 
     signs = {
-      text = {
-        [vim.diagnostic.severity.ERROR] = "", -- Error
-        [vim.diagnostic.severity.WARN] = "", -- Warning
-        [vim.diagnostic.severity.INFO] = "", -- Info
-        [vim.diagnostic.severity.HINT] = "", -- Hint
-      },
+      text = vim.tbl_map(function(e)
+        return e.icon
+      end, diagnostic_map),
       linehl = {
         [vim.diagnostic.severity.ERROR] = "ErrorMsg",
       },
@@ -122,7 +120,11 @@ function M.setup()
     float = {
       border = "rounded", -- Rounded border
       source = true, -- Show source in float
-      prefix = "", -- No extra prefix
+      prefix = function(diagnostic, i, total)
+        local icon = diagnostic_map[diagnostic.severity].icon or "●"
+        local hl = diagnostic_map[diagnostic.severity].hl or "DiagnosticInfo"
+        return "(" .. i .. "/" .. total .. ") " .. icon .. " ", hl
+      end,
       header = "", -- No header
       focusable = false, -- Non-focusable float
       style = "minimal", -- Minimal style to blend with UI
