@@ -2,6 +2,7 @@
 
 local M = {}
 
+local map = vim.keymap.set
 local diag = vim.diagnostic
 
 --- Setup default diagnostic highlights (virtual text, signs)
@@ -68,20 +69,17 @@ end
 -- @param bufnr buffer number
 local function setup_keymaps(bufnr)
   bufnr = bufnr or 0
-  local opts = { noremap = true, silent = true, buffer = bufnr }
+  local opts = { silent = true, buffer = bufnr }
 
-  -- Jump to next diagnostic
-  vim.keymap.set("n", "]d", function()
+  map("n", "]d", function()
     vim.diagnostic.jump({ count = 1, float = true })
   end, vim.tbl_extend("force", opts, { desc = "Jump to next diagnostic" }))
 
-  -- Jump to previous diagnostic
-  vim.keymap.set("n", "[d", function()
+  map("n", "[d", function()
     vim.diagnostic.jump({ count = -1, float = true })
   end, vim.tbl_extend("force", opts, { desc = "Jump to previous diagnostic" }))
 
-  -- Jump to next ERROR diagnostic
-  vim.keymap.set("n", "[E", function()
+  map("n", "[E", function()
     vim.diagnostic.jump({
       count = 1,
       float = true,
@@ -89,8 +87,7 @@ local function setup_keymaps(bufnr)
     })
   end, vim.tbl_extend("force", opts, { desc = "Jump to previous error" }))
 
-  -- Jump to previous ERROR diagnostic
-  vim.keymap.set("n", "]E", function()
+  map("n", "]E", function()
     vim.diagnostic.jump({
       count = -1,
       float = true,
@@ -98,20 +95,26 @@ local function setup_keymaps(bufnr)
     })
   end, vim.tbl_extend("force", opts, { desc = "Jump to next error" }))
 
-  -- Show diagnostic float under cursor
-  vim.keymap.set(
+  map(
     "n",
     "<leader>e",
     vim.diagnostic.open_float,
-    vim.tbl_extend("force", opts, { desc = "Show diagnostics" })
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Show diagnostics float under cursor" }
+    )
   )
 
-  -- Populate location list with diagnostics
-  vim.keymap.set(
+  map(
     "n",
     "<leader>q",
     vim.diagnostic.setloclist,
-    vim.tbl_extend("force", opts, { desc = "Diagnostics to loclist" })
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Populate location list with diagnostics" }
+    )
   )
 end
 

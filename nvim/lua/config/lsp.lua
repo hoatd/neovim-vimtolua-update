@@ -4,14 +4,16 @@ local M = {}
 
 local utils = require("utils")
 
-M.servers = {
+local map = vim.keymap.set
+
+local servers = {
   "lua_ls",
   -- "pyright",
   -- "ts_server",
   "clangd",
 }
 
-M.server_configs = {
+local server_configs = {
   lua_ls = {
     settings = {
       Lua = {
@@ -32,7 +34,7 @@ M.server_configs = {
   clangd = {},
 }
 
-function M.setup_mason()
+local function setup_mason()
   local ok, mason = pcall(require, "mason")
   if ok then
     mason.setup({
@@ -49,14 +51,69 @@ function M.setup_mason()
   local ok2, mason_lsp = pcall(require, "mason-lspconfig")
   if ok2 then
     mason_lsp.setup({
-      ensure_installed = M.servers,
+      ensure_installed = servers,
       automatic_installation = true,
     })
   end
 end
 
+local function setup_keymaps(bufnr)
+  bufnr = bufnr or 0
+  local opts = { silent = true, buffer = bufnr }
+
+  map(
+    "n",
+    "gd",
+    vim.lsp.buf.definition,
+    vim.tbl_extend("force", opts, { desc = "Go to definition" })
+  )
+
+  map(
+    "n",
+    "K",
+    vim.lsp.buf.hover,
+    vim.tbl_extend("force", opts, { desc = "Hover documentation" })
+  )
+
+  map(
+    "n",
+    "gi",
+    vim.lsp.buf.implementation,
+    vim.tbl_extend("force", opts, { desc = "Go to implementation" })
+  )
+
+  map(
+    "n",
+    "gr",
+    vim.lsp.buf.references,
+    vim.tbl_extend("force", opts, { desc = "List references" })
+  )
+
+  map(
+    "n",
+    "<leader>rn",
+    vim.lsp.buf.rename,
+    vim.tbl_extend("force", opts, { desc = "Rename symbol" })
+  )
+
+  map(
+    "n",
+    "<leader>ca",
+    vim.lsp.buf.code_action,
+    vim.tbl_extend("force", opts, { desc = "Code action" })
+  )
+
+  map(
+    "n",
+    "<leader>e",
+    vim.diagnostic.open_float,
+    vim.tbl_extend("force", opts, { desc = "Show diagnostic float" })
+  )
+end
+
 local function on_attach(client, bufnr)
   require("config.diagnostics").setup(bufnr)
+  setup_keymaps(bufnr)
   vim.notify(
     "LSP started for "
       .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
@@ -68,27 +125,16 @@ local function on_attach(client, bufnr)
   )
 end
 
-function M.setup_servers()
-  for _, server_name in ipairs(M.servers) do
-    local config = M.server_configs[server_name] or {}
+local function setup_servers()
+  for _, server_name in ipairs(servers) do
+    local config = server_configs[server_name] or {}
     config.on_attach = on_attach
     vim.lsp.config(server_name, config)
     vim.lsp.enable(server_name)
   end
 end
 
-function M.setup_keymaps()
-  local opts = { noremap = true, silent = true }
-  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-  vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-  vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
-end
-
-function M.setup_trouble()
+local function setup_trouble()
   local ok, trouble = pcall(require, "trouble")
   if ok then
     trouble.setup({
@@ -99,10 +145,10 @@ function M.setup_trouble()
 end
 
 function M.setup()
-  M.setup_mason()
-  M.setup_servers()
-  M.setup_keymaps()
-  M.setup_trouble()
+  setup_mason()
+  setup_servers()
+  setup_keymaps()
+  setup_trouble()
 end
 
 return M
