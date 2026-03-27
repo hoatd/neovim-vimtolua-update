@@ -52,7 +52,7 @@ function M.setup_mason()
 end
 
 local function on_attach(client, bufnr)
-  vim.notify("LSP " .. client.name .. " started for " .. utils.get_buffer_names(bufnr, {name = "[No Name]"}).name, vim.log.levels.INFO, { timeout = 2000, replace = "silent" })
+  vim.notify("LSP started for " .. utils.get_buffer_names(bufnr, {name = "[No Name]"}).name .. " (" .. client.name .. ")", vim.log.levels.INFO, { timeout = 2000, replace = "silent" })
 end
 
 function M.setup_servers()
