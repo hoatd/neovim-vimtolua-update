@@ -11,6 +11,7 @@ M.parsers = {
   "cmake",
   "csv",
   "diff",
+  "dockerfile",
   "gitattributes",
   "gitcommit",
   "gitignore",
@@ -30,7 +31,6 @@ M.parsers = {
   "vimdoc",
   "yaml",
   -- "cuda",
-  -- "dockerfile"
   -- "make",
   -- "regex",
   -- "sql",
