@@ -2,6 +2,8 @@
 
 local M = {}
 
+local utils = require("utils")
+
 M.servers = {
   "lua_ls",
   -- "pyright",
@@ -50,7 +52,7 @@ function M.setup_mason()
 end
 
 local function on_attach(client, bufnr)
-  vim.notify("LSP started: " .. client.name, vim.log.levels.INFO)
+  vim.notify("LSP " .. client.name .. " started for " .. utils.get_buffer_names(bufnr, {name = "[No Name]"}).name, vim.log.levels.INFO, { timeout = 2000, replace = "silent" })
 end
 
 function M.setup_servers()
