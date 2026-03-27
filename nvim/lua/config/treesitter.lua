@@ -4,6 +4,7 @@ local M = {}
 
 local utils = require("utils")
 local ts = require("nvim-treesitter")
+local ts_textobjects = require("nvim-treesitter-textobjects")
 local ts_move = require("nvim-treesitter-textobjects.move")
 local ts_swap = require("nvim-treesitter-textobjects.swap")
 local ts_select = require("nvim-treesitter-textobjects.select")
@@ -224,7 +225,7 @@ function M.setup()
   -- ============================================================
   -- nvim-treesitter-textobjects setup
   -- ============================================================
-  require("nvim-treesitter-textobjects").setup({
+  ts_textobjects.setup({
     select = {
       enable = true,
       lookahead = true,
