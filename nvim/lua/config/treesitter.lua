@@ -5,6 +5,7 @@ local M = {}
 local utils = require("utils")
 local ts = require("nvim-treesitter")
 local ts_move = require("nvim-treesitter-textobjects.move")
+local ts_swap = require("nvim-treesitter-textobjects.swap")
 local ts_select = require("nvim-treesitter-textobjects.select")
 
 local map = vim.keymap.set
@@ -86,6 +87,38 @@ local function setup_keymaps(bufnr)
   map("n", "[a", function()
     ts_move.goto_previous_start("@parameter.inner", "textobjects")
   end, vim.tbl_extend("force", opts, { desc = "Jump to previous parameter" }))
+
+  map({ "x", "o" }, "af", function()
+    ts_select.select_textobject("@function.outer", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select around function" }))
+
+  map({ "x", "o" }, "if", function()
+    ts_select.select_textobject("@function.inner", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select inside function" }))
+
+  map({ "x", "o" }, "ac", function()
+    ts_select.select_textobject("@class.outer", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select around class" }))
+
+  map({ "x", "o" }, "ic", function()
+    ts_select.select_textobject("@class.inner", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select inside class" }))
+
+  map({ "x", "o" }, "aa", function()
+    ts_select.select_textobject("@parameter.outer", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select around parameter" }))
+
+  map({ "x", "o" }, "ia", function()
+    ts_select.select_textobject("@parameter.inner", "textobjects")
+  end, vim.tbl_extend("force", opts, { desc = "Select inside parameter" }))
+
+  map("n", "<leader>a", function()
+    ts_swap.swap_next("@parameter.inner")
+  end, vim.tbl_extend("force", opts, { desc = "Swap next node" }))
+
+  map("n", "<leader>A", function()
+    ts_swap.swap_previous("@parameter.outer")
+  end, vim.tbl_extend("force", opts, { desc = "Swap previous node" }))
 end
 
 function M.setup()
@@ -204,8 +237,6 @@ function M.setup()
 
     swap = {
       enable = true,
-      swap_next = { ["<leader>a"] = "@parameter.inner" },
-      swap_previous = { ["<leader>A"] = "@parameter.inner" },
     },
   })
 
