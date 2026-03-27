@@ -100,9 +100,10 @@ function M.setup()
       prefix = function(diagnostic)
         return diagnostic_map[diagnostic.severity].icon or "●"
       end,
-      spacing = 2, -- Space between text and prefix
+      spacing = 1, -- Space between text and prefix
       severity = { min = vim.diagnostic.severity.HINT }, -- Show all levels
       virt_text_pos = "eol", -- End of line
+      virt_text_win_col = 120, -- Should be the colorcolumn that greater than the length of current line
     },
 
     signs = {
