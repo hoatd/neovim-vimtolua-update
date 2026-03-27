@@ -5,7 +5,7 @@ local M = {}
 function M.setup()
   -- Register plugins
   vim.pack.add({
-    "https://github.com/Mofiqul/dracula.nvim", -- Theme
+    "https://github.com/Mofiqul/dracula.nvim", -- Dracula theme
     "https://github.com/nvim-tree/nvim-web-devicons", -- Icons
     "https://github.com/nvim-lualine/lualine.nvim", -- Statusline
     "https://github.com/nanozuki/tabby.nvim", -- Tabline
@@ -47,7 +47,11 @@ function M.setup()
 
   -- Lualine
   if pcall(require, "lualine") then
-    require("lualine").setup({})
+    require("lualine").setup({
+      options = {
+        theme = "dracula-nvim",
+      },
+    })
   end
 
   -- Tabby
