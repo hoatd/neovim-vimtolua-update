@@ -86,30 +86,6 @@ local function setup_keymaps(bufnr)
   map("n", "[a", function()
     ts_move.goto_previous_start("@parameter.inner", "textobjects")
   end, vim.tbl_extend("force", opts, { desc = "Jump to previous parameter" }))
-
-  map({ "x", "o" }, "af", function()
-    ts_select.select_textobject("@function.outer", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select around function" }))
-
-  map({ "x", "o" }, "if", function()
-    ts_select.select_textobject("@function.inner", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select inside function" }))
-
-  map({ "x", "o" }, "ac", function()
-    ts_select.select_textobject("@class.outer", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select around class" }))
-
-  map({ "x", "o" }, "ic", function()
-    ts_select.select_textobject("@class.inner", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select inside class" }))
-
-  map({ "x", "o" }, "aa", function()
-    ts_select.select_textobject("@parameter.outer", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select around parameter" }))
-
-  map({ "x", "o" }, "ia", function()
-    ts_select.select_textobject("@parameter.inner", "textobjects")
-  end, vim.tbl_extend("force", opts, { desc = "Select inside parameter" }))
 end
 
 function M.setup()
@@ -219,15 +195,6 @@ function M.setup()
     select = {
       enable = true,
       lookahead = true,
-      keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        ["ic"] = "@class.inner",
-        ["aa"] = "@parameter.outer",
-        ["ia"] = "@parameter.inner",
-        -- add more as you like: ["as"] = "@statement.outer", etc.
-      },
     },
 
     move = {
