@@ -2,7 +2,7 @@
 
 require("config.settings")
 require("config.keymaps")
-require("config.autocmds")
+require("config.autocmds").setup()
 require("config.plugins").setup()
 require("config.ui").setup()
 require("config.treesitter").setup()

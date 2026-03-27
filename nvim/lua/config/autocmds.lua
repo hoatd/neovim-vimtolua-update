@@ -1,4 +1,8 @@
--- lua/autocmds.lua
+-- lua/config/autocmds.lua
+
+local M = {}
+
+function M.setup()
 
 local utils = require("utils")
 
@@ -108,3 +112,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+end
+
+return M
