@@ -2,9 +2,9 @@
 
 local M = {}
 
-function M.setup()
-
 local utils = require("utils")
+
+function M.setup()
 
 -- ============================================================
 -- Relative number: only in normal mode (except diff mode)
