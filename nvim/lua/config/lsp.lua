@@ -9,7 +9,7 @@ local map = vim.keymap.set
 local servers = {
   "lua_ls",
   -- "pyright",
-  -- "ts_server",
+  -- "ts_ls",
   "clangd",
 }
 
