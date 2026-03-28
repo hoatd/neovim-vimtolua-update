@@ -125,35 +125,8 @@ function M.setup()
   -- Install parsers automatically
   ts.install(parsers):wait(30000)
 
-  ts.setup({
-    highlight = {
-      enable = true,
-
-      -- Disable on very large files
-      disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats =
-          pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        return ok and stats and stats.size > max_filesize
-      end,
-
-      -- Keep vim regex highlighting for things Treesitter doesn't cover well
-      additional_vim_regex_highlighting = { "markdown" },
-    },
-
-    indent = { enable = true },
-
-    textobjects = { enable = true },
-
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "<C-space>",
-        node_incremental = "<C-space>",
-        node_decremental = "<bs>",
-      },
-    },
-  })
+  -- Dont need setup by default
+  -- ts.setup({})
 
   -- ============================================================
   -- Folding & indentation per-buffer setup
