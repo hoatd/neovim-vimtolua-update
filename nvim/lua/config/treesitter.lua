@@ -129,30 +129,72 @@ function M.setup()
   -- ts.setup({})
 
   -- ============================================================
-  -- Folding & indentation per-buffer setup
+  -- Per-Filetype setup
   -- ============================================================
   vim.api.nvim_create_autocmd({ "FileType", "BufReadPost" }, {
     group = utils.augroup("treesitter"),
     callback = function(args)
       local buf = args.buf
-      local ft = vim.bo[buf].filetype
-      local lang = vim.treesitter.language.get_lang(ft)
+      local ft = vim.bo[buf].filetype or ""
 
-      -- Skip if no language mapping exists
-      if not lang then
+      if ft == "" then
+        return
+      end
+
+      -- Check if language mapping exists
+      local lang = vim.treesitter.language.get_lang(ft) or ""
+      if lang == "" then
+        vim.notify(
+          'Treesitter: Unsupported filetype "' .. ft .. '"',
+          vim.log.levels.WARN
+        )
         return
       end
 
       -- Check if parser is available before starting
-      local ok, parser = pcall(vim.treesitter.require_language, lang)
-      if not ok or not parser then
+      local lang_add_ok, lang_add_err = pcall(vim.treesitter.language.add, lang)
+      if not lang_add_ok then
+        vim.notify(
+          "Treesitter: Failed loading parser for "
+            .. lang
+            .. ": "
+            .. (lang_add_err or "unknown error"),
+          vim.log.levels.WARN
+        )
         return
       end
 
-      vim.treesitter.start(buf, lang)
-      vim.wo.foldmethod = "expr"
-      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      -- Skip if this buffer is in performance mode
+      if vim.b[buf].large_file then
+        return
+      end
+
+      -- Now start treesitter with highlighting enabled
+      local start_ok, start_err = pcall(vim.treesitter.start, buf, lang)
+      if not start_ok then
+        vim.notify(
+          "Treesitter: Failed to start for "
+            .. lang
+            .. ": "
+            .. (start_err or "unknown error"),
+          vim.log.levels.WARN
+        )
+        return
+      end
+
+      -- Enable folding
+      vim.wo[0][0].foldmethod = "expr"
+      vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+      -- Enable indentation
       vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+      vim.notify(
+        "Treesitter started for "
+          .. utils.get_buffer_names(buf, { name = "[No Name]" }).name,
+        vim.log.levels.INFO,
+        { timeout = 2000, replace = true }
+      )
     end,
   })
 
