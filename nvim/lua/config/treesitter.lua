@@ -157,37 +157,64 @@ function M.setup()
   })
 
   -- ============================================================
-  -- Large file optimizations (>10 MB)
+  -- Large (>5 MB) or Long (20k lines) file optimizations
   -- ============================================================
+  local LARGE_FILE_SIZE = 5 * 1024 * 1024
+  local LONG_FILE_LINES = 20000
   vim.api.nvim_create_autocmd("BufReadPre", {
     group = utils.augroup("large_file"),
     callback = function(args)
       local buf = args.buf
-      if vim.fn.getfsize(vim.api.nvim_buf_get_name(buf)) > 10 * 1024 * 1024 then
-        vim.opt_local.swapfile = false
-        vim.opt_local.bufhidden = "unload"
-        vim.opt_local.undolevels = -1
-        vim.opt_local.foldmethod = "manual" -- disable folding
-        vim.opt_local.foldenable = false
-        vim.opt_local.spell = false
+      local fname = vim.api.nvim_buf_get_name(buf)
+
+      -- Early exit for small files
+      local size = vim.fn.getfsize(fname)
+      if size <= LARGE_FILE_SIZE then
+        return
+      end
+
+      -- Mark this buffer as large file
+      vim.b[buf].large_file = true
+
+      vim.bo[buf].swapfile = false
+      vim.bo[buf].undolevels = -1
+
+      local line_count = vim.api.nvim_buf_line_count(buf)
+      if line_count > LONG_FILE_LINES then
+        -- Very long file → Full performance mode
+        vim.wo.foldmethod = "manual"
+        vim.wo.foldenable = false
+        vim.wo.spell = false
+        vim.wo.wrap = false
+        vim.wo.cursorline = false
+        vim.wo.cursorcolumn = false
+        vim.wo.signcolumn = "no"
+        vim.wo.relativenumber = false
+        vim.wo.number = false
+
+        pcall(vim.treesitter.stop, buf)
+
         vim.notify(
-          "Large file detected (>10MB). Performance mode enabled.",
+          string.format(
+            "Treesitter: Very long file (%dK lines, %.1f MB) detected "
+              .. "→ Full performance mode enabled: "
+              .. "No swap, no undo, no spell, no wrap, no line visualization. "
+              .. "Treesitter features are disable as well.",
+            math.floor(line_count / 1000),
+            size / (1024 * 1024)
+          ),
           vim.log.levels.WARN
         )
-      end
-    end,
-  })
-  vim.api.nvim_create_autocmd("BufReadPost", {
-    group = utils.augroup("large_file"),
-    callback = function(args)
-      local buf = args.buf
-      if vim.fn.getfsize(vim.api.nvim_buf_get_name(buf)) > 10 * 1024 * 1024 then
-        vim.treesitter.stop(buf)
-        vim.bo[buf].syntax = "on"
-        vim.wo[0][0].cursorline = false
-        vim.wo[0][0].relativenumber = false
+      else
+        -- Medium-large file → Light performance mode only disable swap and undo (keep highlighting,
+        -- indentation, folding, spell, wrap, and line visualization)
         vim.notify(
-          "Large file detected (>10MB). Performance mode enabled.",
+          string.format(
+            "Treesitter: Large file (%.1f MB) detected "
+              .. "→ Light performance mode enabled: "
+              .. "No swap, no undo support.",
+            size / (1024 * 1024)
+          ),
           vim.log.levels.WARN
         )
       end
