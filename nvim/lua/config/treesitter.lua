@@ -123,7 +123,7 @@ end
 
 function M.setup()
   -- Install parsers automatically
-  ts.install(parsers)
+  ts.install(parsers):wait(30000)
 
   ts.setup({
     highlight = {
