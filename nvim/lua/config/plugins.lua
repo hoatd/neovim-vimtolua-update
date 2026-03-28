@@ -18,6 +18,10 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       branch = "main",
     },
+    {
+      src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
+      branch = "main",
+    },
     "https://github.com/neovim/nvim-lspconfig", -- Core LSP configurations
     "https://github.com/williamboman/mason.nvim", -- Optional LSP installer
     "https://github.com/williamboman/mason-lspconfig.nvim",
