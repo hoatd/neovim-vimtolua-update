@@ -8,6 +8,7 @@ local ts_textobjects = require("nvim-treesitter-textobjects")
 local ts_move = require("nvim-treesitter-textobjects.move")
 local ts_swap = require("nvim-treesitter-textobjects.swap")
 local ts_select = require("nvim-treesitter-textobjects.select")
+local ts_context = require("treesitter-context")
 
 local parsers = {
   "bash",
@@ -281,6 +282,11 @@ function M.setup()
       enable = true,
     },
   })
+
+  -- ============================================================
+  -- nvim-treesitter-context setup
+  -- ============================================================
+  ts_context.setup({})
 
   setup_keymaps()
 end

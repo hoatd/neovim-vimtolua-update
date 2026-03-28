@@ -18,7 +18,7 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       branch = "main",
     },
-    {
+    { -- nvim-treesitter-context
       src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
       branch = "main",
     },
