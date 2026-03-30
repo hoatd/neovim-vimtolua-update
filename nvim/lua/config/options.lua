@@ -1,4 +1,4 @@
--- settings.lua
+-- lua/config/options.lua
 
 -- ============================================================================
 -- Disable unneeded providers

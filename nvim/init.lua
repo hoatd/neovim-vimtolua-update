@@ -1,6 +1,6 @@
 -- Load Lua modules
 
-require("config.settings")
+require("config.options")
 require("config.keymaps")
 require("config.autocmds").setup()
 require("config.plugins").setup()
