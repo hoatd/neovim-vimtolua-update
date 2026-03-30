@@ -140,6 +140,7 @@ function M.setup()
       -- default config
     })
   end
+
 end
 
 return M
