@@ -25,6 +25,7 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
       branch = "main",
     },
+    "https://github.com/folke/persistence.nvim", -- Session manager
     "https://github.com/tpope/vim-fugitive", -- Git command wrap
     "https://github.com/NeogitOrg/neogit", -- Git UI
     "https://github.com/lewis6991/gitsigns.nvim", -- Git signs + hunk actions
@@ -88,6 +89,20 @@ function M.setup()
       --    },
       --  },
     })
+  end
+
+  -- Persistence
+  local ok_persistence, persistence = pcall(require, "persistence")
+  if ok_persistence then
+    persistence.setup({
+      -- default config
+    })
+  else
+    vim.notify(
+      "Plugin: persistence.vim failed setting up: "
+        .. (persistence or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
   -- vim-fugitive
