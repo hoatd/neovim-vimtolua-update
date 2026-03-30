@@ -39,8 +39,9 @@ function M.setup()
   -- Plugin setups
   --
   -- Dracula colorscheme
-  if pcall(require, "dracula") then
-    require("dracula").setup({
+  local ok_dracula, dracula = pcall(require, "dracula")
+  if ok_dracula then
+    dracula.setup({
       show_end_of_buffer = true,
       transparent_bg = true,
       italic_comment = true,
@@ -48,27 +49,45 @@ function M.setup()
     vim.opt.termguicolors = true
     vim.cmd.colorscheme("dracula")
     require("config.ui").hl_dracula()
+  else
+    vim.notify(
+      "Plugin: Dracula failed setting up: " .. (dracula or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
   -- Devicons
-  if pcall(require, "nvim-web-devicons") then
-    require("nvim-web-devicons").setup({
+  local ok_devicons, devicons = pcall(require, "nvim-web-devicons")
+  if ok_devicons then
+    devicons.setup({
       default = true,
     })
+  else
+    vim.notify(
+      "Plugin: Devicons failed setting up: " .. (devicons or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
   -- Lualine
-  if pcall(require, "lualine") then
-    require("lualine").setup({
+  local ok_lualine, lualine = pcall(require, "lualine")
+  if ok_lualine then
+    lualine.setup({
       options = {
         theme = "dracula-nvim",
       },
     })
+  else
+    vim.notify(
+      "Plugin: Lualine failed setting up: " .. (lualine or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
   -- Tabby
-  if pcall(require, "tabby") then
-    require("tabby").setup({
+  local ok_tabby, tabby = pcall(require, "tabby")
+  if ok_tabby then
+    tabby.setup({
       preset = "active_wins_at_tail",
       --  option = {
       --    theme = {
@@ -89,6 +108,11 @@ function M.setup()
       --    },
       --  },
     })
+  else
+    vim.notify(
+      "Plugin: Tabby tabline failed setting up: " .. (tabby or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
   -- Persistence
