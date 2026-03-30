@@ -5,6 +5,9 @@ local M = {}
 function M.setup()
   -- Register plugins
   vim.pack.add({
+    -- Common dependencies
+    "https://github.com/nvim-lua/plenary.nvim", -- Helper lua functions
+
     "https://github.com/Mofiqul/dracula.nvim", -- Dracula theme
     "https://github.com/nvim-tree/nvim-web-devicons", -- Icons
     "https://github.com/nvim-lualine/lualine.nvim", -- Statusline
