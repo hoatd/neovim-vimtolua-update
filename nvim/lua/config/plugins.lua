@@ -34,6 +34,7 @@ function M.setup()
     "https://github.com/williamboman/mason.nvim", -- Optional LSP installer
     "https://github.com/williamboman/mason-lspconfig.nvim",
     "https://github.com/folke/trouble.nvim", -- Optional diagnostics UI
+    "https://github.com/nvim-tree/nvim-tree.lua", -- File explorer
   })
 
   -- Plugin setups
@@ -169,6 +170,17 @@ function M.setup()
       "Plugin: Neogit failed setting up: " .. (diffview or "unknown error"),
       vim.log.levels.WARN
     )
+  end
+
+  local ok_nvimtree, nvimtree = pcall(require, "nvim-tree")
+  if ok_nvimtree then
+    -- Disable netrw at the very beginning (recommended)
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+
+    nvimtree.setup({
+      -- default config
+    })
   end
 end
 
