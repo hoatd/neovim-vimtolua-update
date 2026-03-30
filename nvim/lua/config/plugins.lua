@@ -36,8 +36,17 @@ function M.setup()
     "https://github.com/folke/trouble.nvim", -- Optional diagnostics UI
     "https://github.com/nvim-tree/nvim-tree.lua", -- File explorer
     -- Snippet
-    "https://github.com/L3MON4D3/LuaSnip",           -- Snippet engine
+    "https://github.com/L3MON4D3/LuaSnip", -- Snippet engine
     "https://github.com/rafamadriz/friendly-snippets", -- Huge collection of snippets
+    -- Completion
+    "https://github.com/hrsh7th/nvim-cmp", -- Core completion engine
+    "https://github.com/hrsh7th/cmp-nvim-lsp", -- LSP source
+    "https://github.com/hrsh7th/cmp-buffer", -- Buffer words
+    "https://github.com/hrsh7th/cmp-path", -- File paths
+    "https://github.com/hrsh7th/cmp-cmdline", -- : command line completion
+    "https://github.com/petertriho/cmp-git",
+    "https://github.com/saadparwaiz1/cmp_luasnip", -- Bridge between cmp and LuaSnip
+    "https://github.com/onsails/lspkind.nvim", -- Nice icons in completion menu
   })
 
   -- Plugin setups

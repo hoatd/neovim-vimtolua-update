@@ -126,9 +126,12 @@ local function on_attach(client, bufnr)
 end
 
 local function setup_servers()
+  local completion = require("config.completion")
+  local capabilities = completion.get_capabilities()
   for _, server_name in ipairs(servers) do
     local config = server_configs[server_name] or {}
     config.on_attach = on_attach
+    config.capabilities = capabilities
     vim.lsp.config(server_name, config)
     vim.lsp.enable(server_name)
   end
