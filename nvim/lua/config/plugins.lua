@@ -35,6 +35,9 @@ function M.setup()
     "https://github.com/williamboman/mason-lspconfig.nvim",
     "https://github.com/folke/trouble.nvim", -- Optional diagnostics UI
     "https://github.com/nvim-tree/nvim-tree.lua", -- File explorer
+    -- Snippet
+    "https://github.com/L3MON4D3/LuaSnip",           -- Snippet engine
+    "https://github.com/rafamadriz/friendly-snippets", -- Huge collection of snippets
   })
 
   -- Plugin setups
