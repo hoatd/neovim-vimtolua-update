@@ -124,7 +124,7 @@ end
 
 function M.setup()
   -- Install parsers automatically
-  ts.install(parsers):wait(30000)
+  ts.install(parsers)
 
   -- Dont need setup by default
   -- ts.setup({})
