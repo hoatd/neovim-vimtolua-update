@@ -139,6 +139,12 @@ function M.setup()
     nvimtree.setup({
       -- default config
     })
+  else
+    vim.notify(
+      "Plugin: Nvimtree failed setting up: "
+        .. (nvimtree or "unknown error"),
+      vim.log.levels.WARN
+    )
   end
 
 end
