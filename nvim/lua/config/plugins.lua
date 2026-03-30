@@ -90,6 +90,22 @@ function M.setup()
     })
   end
 
+  -- vim-fugitive
+  -- dont need to setup fugitive as it is a vimscript instead
+
+  -- Neogit
+  local ok_neogit, neogit = pcall(require, "neogit")
+  if ok_neogit then
+    neogit.setup({
+      -- default config
+    })
+  else
+    vim.notify(
+      "Plugin: Neogit failed setting up: " .. (neogit or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
+
   -- Gitsigns
   local ok_gitsigns, gitsigns = pcall(require, "gitsigns")
   if ok_gitsigns then
@@ -103,18 +119,15 @@ function M.setup()
     )
   end
 
-  -- vim-fugitive
-  -- dont need to setup fugitive as it is a vimscript instead
-
-  -- Neogit
-  local ok_neogit, neogit = pcall(require, "neogit")
-  if ok_neogit then
-    neogit.setup({
+  -- Diffview
+  local ok_diffview, diffview = pcall(require, "diffview")
+  if ok_diffview then
+    diffview.setup({
       -- default config
     })
   else
     vim.notify(
-      "Plugin: Neogit failed setting up: " .. (neogit or "unknown error"),
+      "Plugin: Neogit failed setting up: " .. (diffview or "unknown error"),
       vim.log.levels.WARN
     )
   end
