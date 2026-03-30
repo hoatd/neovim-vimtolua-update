@@ -85,6 +85,19 @@ function M.setup()
       --  },
     })
   end
+
+  -- Gitsigns
+  local ok_gitsigns, gitsigns = pcall(require, "gitsigns")
+  if ok_gitsigns then
+    gitsigns.setup({
+      -- default config
+    })
+  else
+    vim.notify(
+      "Plugin: Gitsigns failed setting up: " .. (gitsigns or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
 end
 
 return M
