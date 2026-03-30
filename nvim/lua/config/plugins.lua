@@ -25,8 +25,9 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
       branch = "main",
     },
-    "https://github.com/lewis6991/gitsigns.nvim", -- Git signs + hunk actions
+    "https://github.com/tpope/vim-fugitive", -- Git command wrap
     "https://github.com/NeogitOrg/neogit", -- Git UI
+    "https://github.com/lewis6991/gitsigns.nvim", -- Git signs + hunk actions
     "https://github.com/sindrets/diffview.nvim", -- Side-by-side diff viewer
     "https://github.com/neovim/nvim-lspconfig", -- Core LSP configurations
     "https://github.com/williamboman/mason.nvim", -- Optional LSP installer
@@ -101,6 +102,9 @@ function M.setup()
       vim.log.levels.WARN
     )
   end
+
+  -- vim-fugitive
+  -- dont need to setup fugitive as it is a vimscript instead
 
   -- Neogit
   local ok_neogit, neogit = pcall(require, "neogit")
