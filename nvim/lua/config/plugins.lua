@@ -22,6 +22,9 @@ function M.setup()
       src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
       branch = "main",
     },
+    "https://github.com/lewis6991/gitsigns.nvim", -- Git signs + hunk actions
+    "https://github.com/NeogitOrg/neogit", -- Git UI
+    "https://github.com/sindrets/diffview.nvim", -- Side-by-side diff viewer
     "https://github.com/neovim/nvim-lspconfig", -- Core LSP configurations
     "https://github.com/williamboman/mason.nvim", -- Optional LSP installer
     "https://github.com/williamboman/mason-lspconfig.nvim",
