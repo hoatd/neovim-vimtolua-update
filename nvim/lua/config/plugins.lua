@@ -101,6 +101,19 @@ function M.setup()
       vim.log.levels.WARN
     )
   end
+
+  -- Neogit
+  local ok_neogit, neogit = pcall(require, "neogit")
+  if ok_neogit then
+    neogit.setup({
+      -- default config
+    })
+  else
+    vim.notify(
+      "Plugin: Neogit failed setting up: " .. (neogit or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
 end
 
 return M
