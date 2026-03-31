@@ -99,7 +99,6 @@ local function build_diagnostic_sign_icons()
 end
 
 --- Main setup function
--- @param bufnr optional, for buffer-local keymaps
 function M.setup()
   diag.config({
     underline = true, -- Underline problematic text

@@ -161,12 +161,10 @@ function M.setup()
     })
   else
     vim.notify(
-      "Plugin: Nvimtree failed setting up: "
-        .. (nvimtree or "unknown error"),
+      "Plugin: Nvimtree failed setting up: " .. (nvimtree or "unknown error"),
       vim.log.levels.WARN
     )
   end
-
 end
 
 return M
