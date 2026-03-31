@@ -141,20 +141,9 @@ local function setup_servers()
   end
 end
 
-local function setup_trouble()
-  local ok, trouble = pcall(require, "trouble")
-  if ok then
-    trouble.setup({
-      auto_open = false,
-      auto_close = true,
-    })
-  end
-end
-
 function M.setup()
   setup_mason()
   setup_servers()
-  setup_trouble()
 end
 
 return M
