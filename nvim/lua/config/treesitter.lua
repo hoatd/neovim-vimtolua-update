@@ -218,7 +218,7 @@ function M.setup()
       end
 
       -- Early exit for non file buffer: terminal, help, ...
-      local ok, stat = pcall(vim.loop.fs_stat, name)
+      local ok, stat = pcall(vim.uv.fs_stat, name)
       if not ok or not stat or stat.type ~= "file" then
         return
       end
