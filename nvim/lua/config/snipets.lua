@@ -8,13 +8,8 @@ function M.setup()
   local ok_luasnip, luasnip = pcall(require, "luasnip")
   if ok_luasnip then
     luasnip.setup({
-      -- default config
-    })
-
-    -- Basic configuration
-    luasnip.config.set_config({
       history = true, -- Remember snippet history so you can jump back
-      updateevents = "TextChanged,TextChangedI", -- Update dynamic snippets while typing
+      update_events = "TextChanged,TextChangedI", -- Update dynamic snippets while typing
       enable_autosnippets = true, -- Enable autosnippets (e.g. date, etc.)
       region_check_events = "InsertEnter", -- Optional: better snippet cleanup
       delete_check_events = "InsertLeave",
