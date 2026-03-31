@@ -39,7 +39,6 @@ function M.setup()
         { name = "luasnip" },
         { name = "buffer", keyword_length = 3 },
         { name = "path" },
-        { name = "cmdline" },
       }),
       formatting = ok_lspkind and {
         format = lspkind.cmp_format({
