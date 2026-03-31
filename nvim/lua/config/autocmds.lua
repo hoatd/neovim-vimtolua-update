@@ -1,4 +1,5 @@
 -- lua/config/autocmds.lua
+-- Basic autocmds
 
 local M = {}
 
@@ -60,7 +61,8 @@ function M.setup()
     group = utils.augroup("quickfix"),
     pattern = "qf",
     callback = function()
-      vim.api.nvim_command("wincmd J")
+      local cmd = vim.api.nvim_parse_cmd('wincmd J', {})
+      vim.api.nvim_cmd(cmd, {})   -- newer structured API
     end,
   })
 
