@@ -24,7 +24,7 @@ function M.setup()
   local ok_gitsigns, gitsigns = pcall(require, "gitsigns")
   if ok_gitsigns then
     gitsigns.setup({
-      -- default config
+      current_line_blame = true,
     })
   else
     vim.notify(
