@@ -102,7 +102,6 @@ local function setup_keymaps(bufnr)
     vim.lsp.buf.code_action,
     vim.tbl_extend("force", opts, { desc = "Code action" })
   )
-
 end
 
 local function on_attach(client, bufnr)
@@ -110,7 +109,7 @@ local function on_attach(client, bufnr)
   setup_keymaps(bufnr)
 
   if client.server_capabilities.inlayHintProvider then
-    vim.lsp.inlay_hint.enable(true, {bufnr=bufnr})
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 
   vim.notify(

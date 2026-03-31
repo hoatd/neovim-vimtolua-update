@@ -105,7 +105,7 @@ function M.setup()
       virt_text_pos = "eol", -- End of line
       virt_text_win_col = 120, -- Should be the colorcolumn that greater than the length of current line
     },
-
+    virtual_lines = false,
     signs = {
       text = vim.tbl_map(function(e)
         return e.icon

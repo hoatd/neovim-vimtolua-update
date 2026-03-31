@@ -1,4 +1,5 @@
 -- lua/utils.lua
+-- Utilize and helper functions
 
 local M = {}
 

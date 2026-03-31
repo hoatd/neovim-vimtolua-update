@@ -1,3 +1,4 @@
+-- init.lua
 -- Load Lua modules
 
 require("config.options")

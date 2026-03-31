@@ -1,4 +1,5 @@
 --- lua/config/ui.lua
+--- Basic UI
 
 local utils = require("utils")
 
@@ -22,7 +23,7 @@ function M.setup()
     M.hl_dracula()
   end
 
-  vim.schedule(apply_ui_highlights)
+  apply_ui_highlights()
 
   vim.api.nvim_create_autocmd("ColorScheme", {
     group = group,
