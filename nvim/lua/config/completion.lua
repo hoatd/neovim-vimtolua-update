@@ -7,22 +7,25 @@ function M.setup()
   local ok_cmp, cmp = pcall(require, "cmp")
   if ok_cmp then
     local ok_luasnip, luasnip = pcall(require, "luasnip")
+    if not ok_luasnip then
+      vim.notify(
+        "Plugin: Luasnip failed loaded "
+          .. (luasnip or "unknown error"),
+        vim.log.levels.WARN
+      )
+    end
+
     local ok_lspkind, lspkind = pcall(require, "lspkind")
     cmp.setup({
       snippet = {
         expand = function(args)
-          -- For `luasnip` users.
           if ok_luasnip then
-            require("luasnip").lsp_expand(args.body)
+            -- Use `luasnip` snipets
+            luasnip.lsp_expand(args.body)
           else
-            vim.notify(
-              "Plugin: Luasnip failed setting up: "
-                .. (luasnip or "unknown error"),
-              vim.log.levels.WARN
-            )
+            -- Use native neovim snippets
+            vim.snippet.expand(args.body)
           end
-          -- For native neovim snippets
-          vim.snippet.expand(args.body)
         end,
       },
       sources = cmp.config.sources({
@@ -74,10 +77,14 @@ function M.setup()
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
-          elseif luasnip.expandable() then
-            luasnip.expand()
-          elseif luasnip.locally_jumpable(1) then
-            luasnip.jump(1)
+          elseif ok_luasnip then
+            if luasnip.expandable() then
+              luasnip.expand()
+            elseif luasnip.locally_jumpable(1) then
+              luasnip.jump(1)
+            else
+              fallback()
+            end
           else
             fallback()
           end
@@ -86,8 +93,12 @@ function M.setup()
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif luasnip.locally_jumpable(-1) then
-            luasnip.jump(-1)
+          elseif ok_luasnip then
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
           else
             fallback()
           end
