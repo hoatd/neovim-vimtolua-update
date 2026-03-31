@@ -2,7 +2,7 @@
 -- Load Lua modules
 
 require("config.options")
-require("config.keymaps")
+require("config.keymaps").setup()
 require("config.autocmds").setup()
 require("config.plugins").setup()
 require("config.ui").setup()
