@@ -113,16 +113,17 @@ function M.setup()
         ghost_text = true, -- Show inline preview
       },
     })
-    -- Set configuration for specific filetype.
-    -- gitcommit
-    require("cmp_git").setup({})
-    cmp.setup.filetype("gitcommit", {
-      sources = cmp.config.sources({
-        { name = "git" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-      }, {
-        { name = "buffer" },
-      }),
-    })
+
+    local ok_cmp_git, cmp_git = pcall(require, "cmp_git")
+    if not ok_cmp_git then
+      vim.notify(
+        "Plugin: cmp-git failed setting up: " .. (cmp_git or "unknown error"),
+        vim.log.levels.WARN
+      )
+    else
+      cmp_git.setup({})
+    end
+
     -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
     cmp.setup.cmdline({ "/", "?" }, {
       mapping = cmp.mapping.preset.cmdline(),
