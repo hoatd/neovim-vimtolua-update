@@ -34,26 +34,31 @@ local server_configs = {
 }
 
 local function setup_mason()
-  local ok, mason = pcall(require, "mason")
-  if ok then
-    mason.setup({
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
-        },
+  local ok_mason, mason = pcall(require, "mason")
+  if not ok_mason then
+    vim.notify("LSP: Failed loading plugin mason", vim.log.levels.ERROR)
+  end
+  mason.setup({
+    ui = {
+      icons = {
+        package_installed = "✓",
+        package_pending = "➜",
+        package_uninstalled = "✗",
       },
-    })
-  end
+    },
+  })
 
-  local ok2, mason_lsp = pcall(require, "mason-lspconfig")
-  if ok2 then
-    mason_lsp.setup({
-      ensure_installed = servers,
-      automatic_installation = true,
-    })
+  local ok_mason_lsp, mason_lsp = pcall(require, "mason-lspconfig")
+  if not ok_mason_lsp then
+    vim.notify(
+      "LSP: Failed loading plugin mason-lspconfig",
+      vim.log.levels.ERROR
+    )
   end
+  mason_lsp.setup({
+    ensure_installed = servers,
+    automatic_installation = true,
+  })
 end
 
 local function setup_keymaps(bufnr)
