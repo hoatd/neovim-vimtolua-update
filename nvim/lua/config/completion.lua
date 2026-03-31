@@ -134,7 +134,7 @@ end
 
 function M.get_capabilities()
   local ok_cmp_lsp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
-  if not ok_cmp_lsp then
+  if ok_cmp_lsp then
     return cmp_lsp.default_capabilities()
   else
     return vim.lsp.protocol.make_client_capabilities()
