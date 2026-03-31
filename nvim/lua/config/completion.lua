@@ -16,6 +16,14 @@ function M.setup()
     end
 
     local ok_lspkind, lspkind = pcall(require, "lspkind")
+    if not ok_lspkind then
+      vim.notify(
+        "Plugin: Lspkind failed loaded "
+          .. (lspkind or "unknown error"),
+        vim.log.levels.WARN
+      )
+    end
+
     cmp.setup({
       snippet = {
         expand = function(args)
