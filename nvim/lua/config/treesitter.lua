@@ -208,10 +208,21 @@ function M.setup()
     group = utils.augroup("large_file"),
     callback = function(args)
       local buf = args.buf
-      local fname = vim.api.nvim_buf_get_name(buf)
+      local name = vim.api.nvim_buf_get_name(buf)
+
+      -- Early exit for empty / unnamed buffer
+      if name == "" then
+        return
+      end
+
+      -- Early exit for non file buffer: terminal, help, ...
+      local ok, stat = pcall(vim.loop.fs_stat, name)
+      if not ok or not stat or stat.type ~= "file" then
+        return
+      end
 
       -- Early exit for small files
-      local size = vim.fn.getfsize(fname)
+      local size = stat.size
       if size <= LARGE_FILE_SIZE then
         return
       end
