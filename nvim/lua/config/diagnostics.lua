@@ -6,28 +6,6 @@ local diag = vim.diagnostic
 
 --- Setup default diagnostic highlights (virtual text, signs)
 local function setup_highlights()
-  local hl = vim.api.nvim_set_hl
-
-  hl(
-    0,
-    "DiagnosticVirtualTextError",
-    { fg = "#ff5555", italic = true, nocombine = true }
-  )
-  hl(
-    0,
-    "DiagnosticVirtualTextWarn",
-    { fg = "#f1fa8c", italic = true, nocombine = true }
-  )
-  hl(
-    0,
-    "DiagnosticVirtualTextInfo",
-    { fg = "#8be9fd", italic = true, nocombine = true }
-  )
-  hl(
-    0,
-    "DiagnosticVirtualTextHint",
-    { fg = "#bd93f9", italic = true, nocombine = true }
-  )
 end
 
 --- Setup buffer-local diagnostic keymaps
