@@ -29,7 +29,7 @@ local server_configs = {
     },
   },
   pyright = {},
-  ts_server = {},
+  ts_ls = {},
   clangd = {},
 }
 
@@ -37,6 +37,7 @@ local function setup_mason()
   local ok_mason, mason = pcall(require, "mason")
   if not ok_mason then
     vim.notify("LSP: Failed loading plugin mason", vim.log.levels.ERROR)
+    return
   end
   mason.setup({
     ui = {
@@ -54,6 +55,7 @@ local function setup_mason()
       "LSP: Failed loading plugin mason-lspconfig",
       vim.log.levels.ERROR
     )
+    return
   end
   mason_lsp.setup({
     ensure_installed = servers,

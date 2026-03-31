@@ -1,4 +1,4 @@
--- lua/config/snipets.lua
+-- lua/config/snippets.lua
 
 local M = {}
 
