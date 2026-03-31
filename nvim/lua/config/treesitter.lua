@@ -190,6 +190,8 @@ function M.setup()
       -- Enable indentation
       vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
+      setup_keymaps(buf)
+
       vim.notify(
         "Treesitter started for "
           .. utils.get_buffer_names(buf, { name = "[No Name]" }).name,
@@ -298,8 +300,6 @@ function M.setup()
   -- nvim-treesitter-context setup
   -- ============================================================
   ts_context.setup({})
-
-  setup_keymaps()
 end
 
 return M
