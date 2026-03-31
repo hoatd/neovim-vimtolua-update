@@ -2,6 +2,69 @@
 
 local M = {}
 
+-- Persistence
+local setup_persistence = function()
+  local ok_persistence, persistence = pcall(require, "persistence")
+  if not ok_persistence then
+    vim.notify(
+      "Plugin: persistence.vim failed setting up: "
+        .. (persistence or "unknown error"),
+      vim.log.levels.WARN
+    )
+    return
+  end
+  persistence.setup({
+    -- default config
+  })
+
+  local map = vim.keymap.set
+  local opts = { silent = true }
+
+  map(
+    "n",
+    "<leader>qs",
+    function()
+      persistence.load()
+    end,
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Load the session for the current directory" }
+    )
+  )
+  map(
+    "n",
+    "<leader>ql",
+    function()
+      persistence.load({ last = true })
+    end,
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Load the session that was last used" }
+    )
+  )
+  map(
+    "n",
+    "<leader>qL",
+    function()
+      persistence.select()
+    end,
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Select a session to load from an UI" }
+    )
+  )
+  map("n", "<leader>qd", function()
+    persistence.stop()
+  end, vim.tbl_extend(
+    "force",
+    opts,
+    { desc = "Stop persistence the session" }
+  ))
+end
+
 function M.setup()
   -- Register plugins
   vim.pack.add({
@@ -136,19 +199,7 @@ function M.setup()
     )
   end
 
-  -- Persistence
-  local ok_persistence, persistence = pcall(require, "persistence")
-  if ok_persistence then
-    persistence.setup({
-      -- default config
-    })
-  else
-    vim.notify(
-      "Plugin: persistence.vim failed setting up: "
-        .. (persistence or "unknown error"),
-      vim.log.levels.WARN
-    )
-  end
+  setup_persistence()
 
   local ok_nvimtree, nvimtree = pcall(require, "nvim-tree")
   if ok_nvimtree then
