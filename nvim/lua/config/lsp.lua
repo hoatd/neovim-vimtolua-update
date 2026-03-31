@@ -103,12 +103,6 @@ local function setup_keymaps(bufnr)
     vim.tbl_extend("force", opts, { desc = "Code action" })
   )
 
-  map(
-    "n",
-    "<leader>e",
-    vim.diagnostic.open_float,
-    vim.tbl_extend("force", opts, { desc = "Show diagnostic float" })
-  )
 end
 
 local function on_attach(client, bufnr)
