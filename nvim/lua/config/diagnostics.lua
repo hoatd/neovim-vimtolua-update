@@ -90,6 +90,13 @@ local diagnostic_map = {
   [vim.diagnostic.severity.INFO] = { icon = "", hl = "DiagnosticInfo" },
   [vim.diagnostic.severity.HINT] = { icon = "", hl = "DiagnosticHint" },
 }
+local function build_diagnostic_sign_icons()
+  local result = {}
+  for severity, entry in pairs(diagnostic_map) do
+    result[severity] = { entry.icon or "●" }
+  end
+  return result
+end
 
 --- Main setup function
 -- @param bufnr optional, for buffer-local keymaps
@@ -107,9 +114,7 @@ function M.setup()
     },
     virtual_lines = false,
     signs = {
-      text = vim.tbl_map(function(e)
-        return e.icon
-      end, diagnostic_map),
+      text = build_diagnostic_sign_icons(),
       linehl = {
         [vim.diagnostic.severity.ERROR] = "ErrorMsg",
       },
