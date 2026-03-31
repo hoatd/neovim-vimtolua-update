@@ -1,7 +1,7 @@
 -- init.lua
 -- Load Lua modules
 
-require("config.options")
+require("config.options").setup()
 require("config.keymaps").setup()
 require("config.autocmds").setup()
 require("config.plugins").setup()

@@ -1,12 +1,12 @@
 -- lua/config/options.lua
+-- Basic options
+
+local M = {}
 
 -- ============================================================================
--- Disable unneeded providers
+-- Standard neovim data path
 -- ============================================================================
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_ruby_provider = 0
--- vim.g.loaded_node_provider = 0
--- vim.g.loaded_python3_provider = 0
+local data_path = vim.fn.stdpath("data") -- ~/.local/share/nvim
 
 -- ============================================================================
 -- Helper functions
@@ -61,12 +61,6 @@ local function ensure_dirs(base_path, ...)
 end
 
 -- ============================================================================
--- Data directories for swap, undo, backup, tags
--- ============================================================================
-local data_path = vim.fn.stdpath("data") -- ~/.local/share/nvim
-ensure_dirs(data_path, "swap", "backup", "undo", "tags")
-
--- ============================================================================
 -- Core / Global options
 -- ============================================================================
 local core_opts = {
@@ -86,7 +80,6 @@ local core_opts = {
   timeoutlen = 500, -- Key sequence timeout duration (ms)
   ttimeoutlen = 100, -- Terminal key code timeout (ms)
 }
-apply_options(core_opts)
 
 -- ============================================================================
 -- Editing behavior
@@ -128,8 +121,6 @@ local editing_opts_append = {
     "alpha", -- Increment/Decremental list by Ctrl+A/Ctrl+X
   },
 }
-apply_options(editing_opts)
-append_options(editing_opts_append)
 
 -- ============================================================================
 -- Window / Display options
@@ -162,8 +153,6 @@ local display_opts = {
 local display_opts_append = {
   cpoptions = "n", -- showbreak shown even in multi-byte character.
 }
-apply_options(display_opts)
-append_options(display_opts_append)
 
 -- ============================================================================
 -- UI / Appearance
@@ -211,7 +200,6 @@ local ui_opts = {
     "sm:block-blinkwait175-blinkoff150-blinkon175", -- Showmatch blinking
   },
 }
-apply_options(ui_opts)
 
 -- ============================================================================
 -- File & Buffer Handling
@@ -227,8 +215,6 @@ local buffers_opts = {
   lazyredraw = true, -- Speed up large file scrolling
   autoread = true, -- Auto read externally changed file
 }
-apply_options(buffers_opts)
-
 local files_opts = {
   swapfile = true, -- Enable swap files
   directory = data_path .. "/swap//", -- Swap files dir
@@ -242,7 +228,6 @@ local files_opts = {
   tags = data_path .. "/tags", -- Tag files directory
   tagstack = true,
 }
-apply_options(files_opts)
 
 -- ============================================================================
 -- Searching & Selection
@@ -268,15 +253,12 @@ local searching_opts = {
     "key", -- Use Select mode with Shift+movement
   },
 }
-apply_options(searching_opts)
-
 local find_path_opts = {
   path = { -- Directories fpr finding files (used by commands like :find, gf, etc.)
     ".", -- Current directory
     "**", -- Recursively search subdirectories
   },
 }
-append_options(find_path_opts)
 
 -- ============================================================================
 -- Completion & Wildmenu
@@ -317,7 +299,6 @@ local completion_opts = {
   pumblend = 15,
   winblend = 15,
 }
-apply_options(completion_opts)
 
 -- ============================================================================
 -- Text Formatting & Diff
@@ -335,7 +316,6 @@ local formatting_opts = {
   },
   textwidth = 79,
 }
-apply_options(formatting_opts)
 
 local diff_opts = {
   diffopt = {
@@ -344,7 +324,6 @@ local diff_opts = {
     "iwhiteall", -- Ignore all whitespace differences
   },
 }
-append_options(diff_opts)
 
 -- ============================================================================
 -- Persistence (shada & session)
@@ -360,7 +339,6 @@ local shada_opts = {
     "!", -- save/restore global variables
   },
 }
-apply_options(shada_opts)
 
 local session_opts = {
   sessionoptions = { -- what to save in sessions
@@ -378,15 +356,51 @@ local session_opts = {
     "winsize", -- Save window dimensions
   },
 }
-apply_options(session_opts)
 
--- ============================================================================
--- netrw
--- ============================================================================
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
--- ============================================================================
--- Leader keys
--- ============================================================================
-vim.g.mapleader = ","
-vim.g.maplocalleader = ","
+function M.setup()
+  -- ============================================================================
+  -- Disable unneeded providers
+  -- ============================================================================
+  vim.g.loaded_perl_provider = 0
+  vim.g.loaded_ruby_provider = 0
+  -- vim.g.loaded_node_provider = 0
+  -- vim.g.loaded_python3_provider = 0
+
+  -- ============================================================================
+  -- netrw
+  -- ============================================================================
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
+  -- ============================================================================
+  -- Leader keys
+  -- ============================================================================
+  vim.g.mapleader = ","
+  vim.g.maplocalleader = ","
+
+  -- ============================================================================
+  -- Data directories for swap, undo, backup, tags
+  -- ============================================================================
+  ensure_dirs(data_path, "swap", "backup", "undo", "tags")
+
+  -- ============================================================================
+  -- Using basic options
+  -- ============================================================================
+  apply_options(core_opts)
+  apply_options(editing_opts)
+  append_options(editing_opts_append)
+  apply_options(display_opts)
+  append_options(display_opts_append)
+  apply_options(ui_opts)
+  apply_options(buffers_opts)
+  apply_options(files_opts)
+  apply_options(searching_opts)
+  append_options(find_path_opts)
+  apply_options(completion_opts)
+  apply_options(formatting_opts)
+  append_options(diff_opts)
+  apply_options(shada_opts)
+  apply_options(session_opts)
+end
+
+return M
