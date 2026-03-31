@@ -45,21 +45,21 @@ function M.setup_keymaps(bufnr)
     vim.diagnostic.jump({ count = -1, float = true })
   end, vim.tbl_extend("force", opts, { desc = "Jump to previous diagnostic" }))
 
-  map("n", "[E", function()
+  map("n", "]E", function()
     vim.diagnostic.jump({
       count = 1,
       float = true,
       severity = vim.diagnostic.severity.ERROR,
     })
-  end, vim.tbl_extend("force", opts, { desc = "Jump to previous error" }))
+  end, vim.tbl_extend("force", opts, { desc = "Jump to next error" }))
 
-  map("n", "]E", function()
+  map("n", "[E", function()
     vim.diagnostic.jump({
       count = -1,
       float = true,
       severity = vim.diagnostic.severity.ERROR,
     })
-  end, vim.tbl_extend("force", opts, { desc = "Jump to next error" }))
+  end, vim.tbl_extend("force", opts, { desc = "Jump to previous error" }))
 
   map(
     "n",
