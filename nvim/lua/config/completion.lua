@@ -9,8 +9,7 @@ function M.setup()
     local ok_luasnip, luasnip = pcall(require, "luasnip")
     if not ok_luasnip then
       vim.notify(
-        "Plugin: Luasnip failed loaded "
-          .. (luasnip or "unknown error"),
+        "Plugin: Luasnip failed loaded " .. (luasnip or "unknown error"),
         vim.log.levels.WARN
       )
     end
@@ -18,8 +17,7 @@ function M.setup()
     local ok_lspkind, lspkind = pcall(require, "lspkind")
     if not ok_lspkind then
       vim.notify(
-        "Plugin: Lspkind failed loaded "
-          .. (lspkind or "unknown error"),
+        "Plugin: Lspkind failed loaded " .. (lspkind or "unknown error"),
         vim.log.levels.WARN
       )
     end
@@ -43,7 +41,7 @@ function M.setup()
         { name = "path" },
         { name = "cmdline" },
       }),
-      formatting = {
+      formatting = ok_lspkind and {
         format = lspkind.cmp_format({
           mode = "symbol_text",
           maxwidth = 50,
@@ -55,7 +53,7 @@ function M.setup()
             path = "[Path]",
           },
         }),
-      },
+      } or nil,
       window = {
         completion = cmp.config.window.bordered({
           winhighlight = "Normal:Pmenu,FloatBorder:PmenuBorder,CursorLine:PmenuSel",
