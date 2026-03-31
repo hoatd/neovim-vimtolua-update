@@ -152,10 +152,6 @@ function M.setup()
 
   local ok_nvimtree, nvimtree = pcall(require, "nvim-tree")
   if ok_nvimtree then
-    -- Disable netrw at the very beginning (recommended)
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-
     nvimtree.setup({
       -- default config
     })
