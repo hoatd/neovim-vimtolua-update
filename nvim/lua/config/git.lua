@@ -41,7 +41,7 @@ function M.setup()
     })
   else
     vim.notify(
-      "Plugin: Neogit failed setting up: " .. (diffview or "unknown error"),
+      "Plugin: Diffview failed setting up: " .. (diffview or "unknown error"),
       vim.log.levels.WARN
     )
   end
