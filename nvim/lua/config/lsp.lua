@@ -7,8 +7,8 @@ local diagnostics = require("config.diagnostics")
 
 local servers = {
   "lua_ls",
-  -- "pyright",
-  -- "ts_ls",
+  "pyright",
+  "ts_ls",
   "clangd",
 }
 
@@ -28,8 +28,8 @@ local server_configs = {
       },
     },
   },
-  -- pyright = {},
-  -- ts_server = {},
+  pyright = {},
+  ts_server = {},
   clangd = {},
 }
 
