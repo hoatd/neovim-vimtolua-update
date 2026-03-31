@@ -195,8 +195,7 @@ function M.setup()
       vim.notify(
         "Treesitter started for "
           .. utils.get_buffer_names(buf, { name = "[No Name]" }).name,
-        vim.log.levels.INFO,
-        { timeout = 2000, replace = true }
+        vim.log.levels.INFO
       )
     end,
   })
