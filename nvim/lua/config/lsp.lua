@@ -108,6 +108,11 @@ end
 local function on_attach(client, bufnr)
   diagnostics.setup_keymaps(bufnr)
   setup_keymaps(bufnr)
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(true, {bufnr=bufnr})
+  end
+
   vim.notify(
     "LSP started for "
       .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
