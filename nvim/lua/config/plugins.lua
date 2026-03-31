@@ -6,47 +6,55 @@ function M.setup()
   -- Register plugins
   vim.pack.add({
     -- Common dependencies
-    "https://github.com/nvim-lua/plenary.nvim", -- Helper lua functions
+    { src = "https://github.com/nvim-lua/plenary.nvim" }, -- Helper lua functions
 
-    "https://github.com/Mofiqul/dracula.nvim", -- Dracula theme
-    "https://github.com/nvim-tree/nvim-web-devicons", -- Icons
-    "https://github.com/nvim-lualine/lualine.nvim", -- Statusline
-    "https://github.com/nanozuki/tabby.nvim", -- Tabline
-    { -- nvim-treesitter
+    -- UI components
+    { src = "https://github.com/Mofiqul/dracula.nvim" }, -- Dracula theme
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" }, -- Icons
+    { src = "https://github.com/nvim-lualine/lualine.nvim" }, -- Statusline
+    { src = "https://github.com/nanozuki/tabby.nvim" }, -- Tabline
+
+    -- treesitter
+    {
       src = "https://github.com/nvim-treesitter/nvim-treesitter",
       branch = "main",
-      run = ":TSUpdate",
-    },
-    { -- nvim-treesitter-textobjects
+    }, -- nvim-treesitter
+    {
       src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       branch = "main",
-    },
-    { -- nvim-treesitter-context
+    }, -- nvim-treesitter-textobjects
+    {
       src = "https://github.com/nvim-treesitter/nvim-treesitter-context",
       branch = "main",
-    },
-    "https://github.com/folke/persistence.nvim", -- Session manager
-    "https://github.com/tpope/vim-fugitive", -- Git command wrap
-    "https://github.com/NeogitOrg/neogit", -- Git UI
-    "https://github.com/lewis6991/gitsigns.nvim", -- Git signs + hunk actions
-    "https://github.com/sindrets/diffview.nvim", -- Side-by-side diff viewer
-    "https://github.com/neovim/nvim-lspconfig", -- Core LSP configurations
-    "https://github.com/williamboman/mason.nvim", -- Optional LSP installer
-    "https://github.com/williamboman/mason-lspconfig.nvim",
-    "https://github.com/folke/trouble.nvim", -- Optional diagnostics UI
-    "https://github.com/nvim-tree/nvim-tree.lua", -- File explorer
+    }, -- nvim-treesitter-context
+
+    -- Git relates
+    { src = "https://github.com/tpope/vim-fugitive" }, -- Git command wrap
+    { src = "https://github.com/NeogitOrg/neogit" }, -- Git UI
+    { src = "https://github.com/lewis6991/gitsigns.nvim" }, -- Git signs + hunk actions
+    { src = "https://github.com/sindrets/diffview.nvim" }, -- Side-by-side diff viewer
+    { src = "https://github.com/neovim/nvim-lspconfig" }, -- Core LSP configurations
+    { src = "https://github.com/williamboman/mason.nvim" }, -- Optional LSP installer
+    { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
+    { src = "https://github.com/folke/trouble.nvim" }, -- Optional diagnostics UI
+
+    --
+    { src = "https://github.com/folke/persistence.nvim" }, -- Session manager
+    { src = "https://github.com/nvim-tree/nvim-tree.lua" }, -- File explorer
+
     -- Snippet
-    "https://github.com/L3MON4D3/LuaSnip", -- Snippet engine
-    "https://github.com/rafamadriz/friendly-snippets", -- Huge collection of snippets
+    { src = "https://github.com/L3MON4D3/LuaSnip" }, -- Snippet engine
+    { src = "https://github.com/rafamadriz/friendly-snippets" }, -- Huge collection of snippets
+
     -- Completion
-    "https://github.com/hrsh7th/nvim-cmp", -- Core completion engine
-    "https://github.com/hrsh7th/cmp-nvim-lsp", -- LSP source
-    "https://github.com/hrsh7th/cmp-buffer", -- Buffer words
-    "https://github.com/hrsh7th/cmp-path", -- File paths
-    "https://github.com/hrsh7th/cmp-cmdline", -- : command line completion
-    "https://github.com/petertriho/cmp-git",
-    "https://github.com/saadparwaiz1/cmp_luasnip", -- Bridge between cmp and LuaSnip
-    "https://github.com/onsails/lspkind.nvim", -- Nice icons in completion menu
+    { src = "https://github.com/hrsh7th/nvim-cmp" }, -- Core completion engine
+    { src = "https://github.com/hrsh7th/cmp-nvim-lsp" }, -- LSP source
+    { src = "https://github.com/hrsh7th/cmp-buffer" }, -- Buffer words
+    { src = "https://github.com/hrsh7th/cmp-path" }, -- File paths
+    { src = "https://github.com/hrsh7th/cmp-cmdline" }, -- : command line completion
+    { src = "https://github.com/petertriho/cmp-git" },
+    { src = "https://github.com/saadparwaiz1/cmp_luasnip" }, -- Bridge between cmp and LuaSnip
+    { src = "https://github.com/onsails/lspkind.nvim" }, -- Nice icons in completion menu
   })
 
   -- Plugin setups
