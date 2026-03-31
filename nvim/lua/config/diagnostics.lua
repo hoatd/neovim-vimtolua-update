@@ -93,10 +93,11 @@ local diagnostic_map = {
 local function build_diagnostic_sign_icons()
   local result = {}
   for severity, entry in pairs(diagnostic_map) do
-    result[severity] = { entry.icon or "●" }
+    result[severity] = entry.icon or "●"
   end
   return result
 end
+local diagnostic_icons = build_diagnostic_sign_icons()
 
 --- Main setup function
 function M.setup()
@@ -113,7 +114,7 @@ function M.setup()
     },
     virtual_lines = false,
     signs = {
-      text = build_diagnostic_sign_icons(),
+      text = diagnostic_icons,
       linehl = {
         [vim.diagnostic.severity.ERROR] = "ErrorMsg",
       },
