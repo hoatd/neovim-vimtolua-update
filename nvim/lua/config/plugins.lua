@@ -77,6 +77,8 @@ function M.setup()
     { src = "https://github.com/nvim-lualine/lualine.nvim" }, -- Statusline
     { src = "https://github.com/nanozuki/tabby.nvim" }, -- Tabline
 
+    { src = "https://github.com/folke/which-key.nvim" },
+
     -- treesitter
     {
       src = "https://github.com/nvim-treesitter/nvim-treesitter",
@@ -181,6 +183,18 @@ function M.setup()
   else
     vim.notify(
       "Plugin: Tabby tabline failed setting up: " .. (tabby or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
+
+  local ok_whichkey, whichkey = pcall(require, "which-key")
+  if ok_whichkey then
+    whichkey.setup({
+      -- default config
+    })
+  else
+    vim.notify(
+      "Plugin: which-key failed setting up: " .. (whichkey or "unknown error"),
       vim.log.levels.WARN
     )
   end
