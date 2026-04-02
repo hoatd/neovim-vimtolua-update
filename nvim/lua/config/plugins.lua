@@ -124,6 +124,10 @@ function M.setup()
     -- LSP
     { src = "https://github.com/neovim/nvim-lspconfig" }, -- Core LSP configurations
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
+
+    -- DAP
+    { src = "https://github.com/mfussenegger/nvim-dap" },
+    { src = "https://github.com/jay-babu/mason-nvim-dap.nvim" },
   })
 
   -- Plugin setups
