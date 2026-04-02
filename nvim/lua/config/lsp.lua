@@ -44,6 +44,13 @@ local function setup_keymaps(bufnr)
 
   map(
     "n",
+    "gD",
+    vim.lsp.buf.declarationn,
+    vim.tbl_extend("force", opts, { desc = "Go to definition" })
+  )
+
+  map(
+    "n",
     "K",
     vim.lsp.buf.hover,
     vim.tbl_extend("force", opts, { desc = "Hover documentation" })
