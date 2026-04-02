@@ -7,6 +7,12 @@ function M.setup()
   local map = vim.keymap.set
   local opts = { silent = true }
 
+  -- remap prefix keys
+  if vim.g.keyboard_layout == "de" then
+    map("n", "ä", "[", { remap = true })
+    map("n", "+", "]", { remap = true })
+  end
+
   -- ============================================================
   -- Yank / Search improvements
   -- ============================================================
