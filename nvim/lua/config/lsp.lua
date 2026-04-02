@@ -2,9 +2,6 @@
 
 local M = {}
 
-local utils = require("utils")
-local diagnostics = require("config.diagnostics")
-
 local servers = {
   "lua_ls",
   "pyright",
@@ -32,36 +29,6 @@ local server_configs = {
   ts_ls = {},
   clangd = {},
 }
-
-local function setup_mason()
-  local ok_mason, mason = pcall(require, "mason")
-  if not ok_mason then
-    vim.notify("LSP: Failed loading plugin mason", vim.log.levels.ERROR)
-    return
-  end
-  mason.setup({
-    ui = {
-      icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗",
-      },
-    },
-  })
-
-  local ok_mason_lsp, mason_lsp = pcall(require, "mason-lspconfig")
-  if not ok_mason_lsp then
-    vim.notify(
-      "LSP: Failed loading plugin mason-lspconfig",
-      vim.log.levels.ERROR
-    )
-    return
-  end
-  mason_lsp.setup({
-    ensure_installed = servers,
-    automatic_installation = true,
-  })
-end
 
 local function setup_keymaps(bufnr)
   bufnr = bufnr or 0
@@ -112,6 +79,7 @@ local function setup_keymaps(bufnr)
 end
 
 local function on_attach(client, bufnr)
+  local diagnostics = require("config.diagnostics")
   diagnostics.setup_keymaps(bufnr)
   setup_keymaps(bufnr)
 
@@ -119,6 +87,7 @@ local function on_attach(client, bufnr)
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 
+  local utils = require("utils")
   vim.notify(
     "LSP started for "
       .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
@@ -129,7 +98,20 @@ local function on_attach(client, bufnr)
   )
 end
 
-local function setup_servers()
+function M.setup()
+  local ok_mason_lsp, mason_lsp = pcall(require, "mason-lspconfig")
+  if not ok_mason_lsp then
+    vim.notify(
+      "LSP: Failed loading plugin mason-lspconfig",
+      vim.log.levels.ERROR
+    )
+    return
+  end
+  mason_lsp.setup({
+    ensure_installed = servers,
+    automatic_enable = true,
+  })
+
   local completion = require("config.completion")
   local capabilities = completion.get_capabilities()
   for _, server_name in ipairs(servers) do
@@ -139,11 +121,6 @@ local function setup_servers()
     vim.lsp.config(server_name, config)
     vim.lsp.enable(server_name)
   end
-end
-
-function M.setup()
-  setup_mason()
-  setup_servers()
 end
 
 return M

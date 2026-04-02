@@ -96,9 +96,6 @@ function M.setup()
     { src = "https://github.com/NeogitOrg/neogit" }, -- Git UI
     { src = "https://github.com/lewis6991/gitsigns.nvim" }, -- Git signs + hunk actions
     { src = "https://github.com/sindrets/diffview.nvim" }, -- Side-by-side diff viewer
-    { src = "https://github.com/neovim/nvim-lspconfig" }, -- Core LSP configurations
-    { src = "https://github.com/williamboman/mason.nvim" }, -- Optional LSP installer
-    { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/folke/trouble.nvim" }, -- Optional diagnostics UI
 
     --
@@ -118,6 +115,13 @@ function M.setup()
     { src = "https://github.com/petertriho/cmp-git" },
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" }, -- Bridge between cmp and LuaSnip
     { src = "https://github.com/onsails/lspkind.nvim" }, -- Nice icons in completion menu
+
+    -- Mason
+    { src = "https://github.com/williamboman/mason.nvim" }, -- Optional LSP installer
+
+    -- LSP
+    { src = "https://github.com/neovim/nvim-lspconfig" }, -- Core LSP configurations
+    { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
   })
 
   -- Plugin setups
