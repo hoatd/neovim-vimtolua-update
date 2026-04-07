@@ -45,8 +45,8 @@ local function setup_keymaps(bufnr)
   map(
     "n",
     "gD",
-    vim.lsp.buf.declarationn,
-    vim.tbl_extend("force", opts, { desc = "Go to definition" })
+    vim.lsp.buf.declaration,
+    vim.tbl_extend("force", opts, { desc = "Go to declaration" })
   )
 
   map(
