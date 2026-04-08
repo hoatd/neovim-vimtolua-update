@@ -21,37 +21,37 @@ local function setup_trouble()
     auto_close = true,
   })
 
-  -- Trouble keymaps
-  local map = vim.keymap.set
-  local opts = { silent = true }
-  map(
-    "n",
-    "<leader>xx",
-    "<cmd>Trouble diagnostics toggle<CR>",
-    vim.tbl_extend("force", opts, { desc = "Toggle Trouble diagnostics" })
-  )
-  map(
-    "n",
-    "<leader>xb",
-    "<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
-    vim.tbl_extend(
-      "force",
-      opts,
-      { desc = "Toggle Trouble buffer diagnostics" }
-    )
-  )
-  map(
-    "n",
-    "<leader>xl",
-    "<cmd>Trouble loclist toggle<CR>",
-    vim.tbl_extend("force", opts, { desc = "Toggle Trouble location list" })
-  )
-  map(
-    "n",
-    "<leader>xq",
-    "<cmd>Trouble qflist toggle<CR>",
-    vim.tbl_extend("force", opts, { desc = "Toggle Trouble quickfix" })
-  )
+  -- -- Trouble keymaps
+  -- local map = vim.keymap.set
+  -- local opts = { silent = true }
+  -- map(
+  --   "n",
+  --   "<leader>xx",
+  --   "<cmd>Trouble diagnostics toggle<CR>",
+  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble diagnostics" })
+  -- )
+  -- map(
+  --   "n",
+  --   "<leader>xb",
+  --   "<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
+  --   vim.tbl_extend(
+  --     "force",
+  --     opts,
+  --     { desc = "Toggle Trouble buffer diagnostics" }
+  --   )
+  -- )
+  -- map(
+  --   "n",
+  --   "<leader>xl",
+  --   "<cmd>Trouble loclist toggle<CR>",
+  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble location list" })
+  -- )
+  -- map(
+  --   "n",
+  --   "<leader>xq",
+  --   "<cmd>Trouble qflist toggle<CR>",
+  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble quickfix" })
+  -- )
 end
 
 --- Setup buffer-local diagnostic keymaps
