@@ -9,6 +9,15 @@ local servers = {
 }
 
 function M.setup()
+  local ok_dap, dap = pcall(require, "dap")
+  if not ok_dap then
+    vim.notify(
+      "DAP: Failed loading plugin nvim-dap",
+      vim.log.levels.ERROR
+    )
+    return
+  end
+
   local ok_mason_dap, mason_dap = pcall(require, "mason-nvim-dap")
   if not ok_mason_dap then
     vim.notify(
@@ -19,9 +28,9 @@ function M.setup()
   end
   mason_dap.setup({
     ensure_installed = servers,
+    automatic_installation = true,
   })
 
-  local dap = require("dap")
 
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
