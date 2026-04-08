@@ -131,6 +131,7 @@ function M.setup()
     -- DAP
     { src = "https://github.com/mfussenegger/nvim-dap" },
     { src = "https://github.com/jay-babu/mason-nvim-dap.nvim" },
+    { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
   })
 
   -- Plugin setups

@@ -31,6 +31,15 @@ function M.setup()
     automatic_installation = true,
   })
 
+  local ok_dap_virtual_text, dap_virtual_text = pcall(require, "nvim-dap-virtual-text")
+  if not ok_dap_virtual_text then
+    vim.notify(
+      "DAP: Failed loading plugin nvim-dap-virtual-text",
+      vim.log.levels.WARN
+    )
+  else
+    dap_virtual_text.setup({})
+  end
 
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
