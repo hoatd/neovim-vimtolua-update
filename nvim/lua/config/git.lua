@@ -25,6 +25,104 @@ function M.setup()
   if ok_gitsigns then
     gitsigns.setup({
       current_line_blame = true,
+      on_attach = function(bufnr)
+        local map = vim.keymap.set
+        local opts = { silent = true, buffer = bufnr }
+
+        -- Hunk navigation
+        map("n", "]h", function()
+          if vim.wo.diff then
+            vim.cmd.normal({ "]h", bang = true })
+          else
+            gitsigns.nav_hunk("next")
+          end
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Jump to next hunk" }
+        ))
+        map("n", "[h", function()
+          if vim.wo.diff then
+            vim.cmd.normal({ "[h", bang = true })
+          else
+            gitsigns.nav_hunk("prev")
+          end
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Jump to previous hunk" }
+        ))
+
+        -- Hunk text object
+        map(
+          { "o", "x" },
+          "ih",
+          gitsigns.select_hunk,
+          vim.tbl_extend("force", opts, { desc = "Select current hunk" })
+        )
+
+        -- Hunk actions
+        map(
+          "n",
+          "<leader>hs",
+          gitsigns.stage_hunk,
+          vim.tbl_extend("force", opts, { desc = "Stage current hunk" })
+        )
+        map("n", "<leader>hu", function()
+          gitsigns.reset_hunk({ staged = true })
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Undo staged hunk" }
+        ))
+        map(
+          "n",
+          "<leader>hr",
+          gitsigns.reset_hunk,
+          vim.tbl_extend("force", opts, { desc = "Reset current hunk" })
+        )
+        map("v", "<leader>hs", function()
+          gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Stage selected hunk" }
+        ))
+        map("v", "<leader>hu", function()
+          gitsigns.reset_hunk({
+            vim.fn.line("."),
+            vim.fn.line("v"),
+            staged = true,
+          })
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Undo staged hunk" }
+        ))
+        map("v", "<leader>hr", function()
+          gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Reset selected hunk" }
+        ))
+        map(
+          "n",
+          "<leader>hp",
+          gitsigns.preview_hunk,
+          vim.tbl_extend("force", opts, { desc = "Preview current hunk" })
+        )
+        map(
+          "n",
+          "<leader>hi",
+          gitsigns.preview_hunk_inline,
+          vim.tbl_extend(
+            "force",
+            opts,
+            { desc = "Preview current hunk inline" }
+          )
+        )
+      end,
     })
   else
     vim.notify(
