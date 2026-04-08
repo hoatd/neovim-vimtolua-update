@@ -23,29 +23,111 @@ function M.setup()
 
   local dap = require("dap")
 
-  vim.keymap.set("n", "<F5>", dap.continue)
-  vim.keymap.set("n", "<F10>", dap.step_over)
-  vim.keymap.set("n", "<F11>", dap.step_into)
-  vim.keymap.set("n", "<F12>", dap.step_out)
-  vim.keymap.set("n", "<leader>dc", dap.continue)
-  vim.keymap.set("n", "<leader>do", dap.step_over)
-  vim.keymap.set("n", "<leader>di", dap.step_into)
-  vim.keymap.set("n", "<leader>dO", dap.step_out)
+  local map = vim.keymap.set
+  local opts = { noremap = true, silent = true }
 
-  -- toggle breakpoint
-  vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
+  map(
+    "n",
+    "<F5>",
+    dap.continue,
+    vim.tbl_extend("force", opts, { desc = "Debug start/continue" })
+  )
+  map(
+    "n",
+    "<F10>",
+    dap.step_over,
+    vim.tbl_extend("force", opts, { desc = "Debug step over" })
+  )
+  map(
+    "n",
+    "<F11>",
+    dap.step_into,
+    vim.tbl_extend("force", opts, { desc = "Debug step into" })
+  )
+  map(
+    "n",
+    "<F12>",
+    dap.step_out,
+    vim.tbl_extend("force", opts, { desc = "Debug step out" })
+  )
+  map(
+    "n",
+    "<leader>xc",
+    dap.continue,
+    vim.tbl_extend("force", opts, { desc = "Debug start/continue" })
+  )
+  map(
+    "n",
+    "<leader>xo",
+    dap.step_over,
+    vim.tbl_extend("force", opts, { desc = "Debug step over" })
+  )
+  map(
+    "n",
+    "<leader>xi",
+    dap.step_into,
+    vim.tbl_extend("force", opts, { desc = "Debug step into" })
+  )
+  map(
+    "n",
+    "<leader>xO",
+    dap.step_out,
+    vim.tbl_extend("force", opts, { desc = "Debug step out" })
+  )
 
-  -- next / prev breakpoint
-  vim.keymap.set("n", "]b", function()
-    dap.jump_to_breakpoint(1)
-  end)
-  vim.keymap.set("n", "[b", function()
-    dap.jump_to_breakpoint(-1)
-  end)
+  -- Toggle/set breakpoint
+  map(
+    "n",
+    "<leader>b",
+    dap.toggle_breakpoint,
+    vim.tbl_extend("force", opts, { desc = "Toggle debug breakpoint" })
+  )
+  map(
+    "n",
+    "<leader>B",
+    dap.set_breakpoint,
+    vim.tbl_extend("force", opts, { desc = "Set debug breakpoint" })
+  )
+
+  -- Breakpoint navigation
+  map(
+    "n",
+    "]b",
+    function()
+      dap.jump_to_breakpoint(1)
+    end,
+    vim.tbl_extend("force", opts, { desc = "Jump to next debug breakpoint" })
+  )
+  map(
+    "n",
+    "[b",
+    function()
+      dap.jump_to_breakpoint(-1)
+    end,
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Jump to previous debug breakpoint" }
+    )
+  )
 
   -- stack frame navigation
-  vim.keymap.set("n", "]s", dap.down)
-  vim.keymap.set("n", "[s", dap.up)
+  map(
+    "n",
+    "]s",
+    dap.down,
+    vim.tbl_extend("force", opts, { desc = "Jump to next debug stack frame" })
+  )
+  map(
+    "n",
+    "[s",
+    dap.up,
+    vim.tbl_extend(
+      "force",
+      opts,
+      { desc = "Jump to previous debug stack frame" }
+    )
+  )
 end
 
 return M
