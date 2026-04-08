@@ -67,7 +67,7 @@ local function setup_keymaps(bufnr)
       function()
         ts_move.goto_next_start("@function.outer", "textobjects")
       end,
-      vim.tbl_extend("force", opts, { desc = "Jump to next function start" })
+      vim.tbl_extend("force", opts, { desc = "Jump to next function" })
     )
     map(
       "n",
@@ -78,7 +78,7 @@ local function setup_keymaps(bufnr)
       vim.tbl_extend(
         "force",
         opts,
-        { desc = "Jump to previous function start" }
+        { desc = "Jump to previous function" }
       )
     )
     map("n", "]c", function()
@@ -86,7 +86,7 @@ local function setup_keymaps(bufnr)
     end, vim.tbl_extend(
       "force",
       opts,
-      { desc = "Jump to next class start" }
+      { desc = "Jump to next class" }
     ))
     map(
       "n",
@@ -94,7 +94,7 @@ local function setup_keymaps(bufnr)
       function()
         ts_move.goto_previous_start("@class.outer", "textobjects")
       end,
-      vim.tbl_extend("force", opts, { desc = "Jump to previous class start" })
+      vim.tbl_extend("force", opts, { desc = "Jump to previous class" })
     )
     map("n", "]a", function()
       ts_move.goto_next_start("@parameter.inner", "textobjects")
