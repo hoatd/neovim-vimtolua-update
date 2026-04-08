@@ -122,7 +122,7 @@ function M.setup()
     { src = "https://github.com/onsails/lspkind.nvim" }, -- Nice icons in completion menu
 
     -- Mason
-    { src = "https://github.com/williamboman/mason.nvim" }, -- Optional LSP installer
+    { src = "https://github.com/mason-org/mason.nvim" }, -- LSP/DAP installer
 
     -- LSP
     { src = "https://github.com/neovim/nvim-lspconfig" }, -- Core LSP configurations

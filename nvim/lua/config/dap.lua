@@ -2,19 +2,117 @@
 
 local M = {}
 
+-- local using_cpp = "codelldb"
+local using_cpp = "cppdbg"
+
 local servers = {
   "python",
   "codelldb",
-  -- "cppdbg",
+  "cppdbg", -- cpptools in the Mason
+}
+
+local function get_debugger()
+  -- macOS: gdb is painful to codesign, lldb is native
+  -- Linux: gdb is standard
+  -- Windows: gdb from MinGW/MSYS2
+  if vim.fn.has("mac") == 1 then
+    return { path = vim.fn.exepath("lldb"), mode = "lldb" }
+  else
+    return { path = vim.fn.exepath("gdb"), mode = "gdb" }
+  end
+end
+
+local adapters = {
+  codelldb = function()
+    local mason = require("config.mason")
+    local path = mason.get_package_path("codelldb")
+    if not path then
+      return nil
+    end
+    local bin = vim.fn.has("win32") == 1 and "codelldb.exe" or "codelldb"
+    return {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = vim.fs.joinpath(path, "extension", "adapter", bin),
+        args = { "--port", "${port}" },
+      },
+    }
+  end,
+
+  cppdbg = function()
+    local mason = require("config.mason")
+    local path = mason.get_package_path("cpptools")
+    if not path then
+      return nil
+    end
+    local bin = vim.fn.has("win32") == 1 and "OpenDebugAD7.exe"
+      or "OpenDebugAD7"
+    return {
+      type = "executable",
+      command = vim.fs.joinpath(path, "extension", "debugAdapters", "bin", bin),
+      id = "cppdbg", -- ← tells OpenDebugAD7 to use cppdbg.ad7Engine.json
+      options = {
+        detached = false,
+      },
+    }
+  end,
+}
+
+local configurations = {
+  codelldb = function()
+    return {
+      name = "Launch (codelldb)",
+      type = "codelldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input(
+          "Executable: ",
+          vim.fs.joinpath(vim.fn.getcwd(), "build", ""),
+          "file"
+        )
+      end,
+      cwd = "${workspaceFolder}",
+      stopOnEntry = false,
+    }
+  end,
+
+  cppdbg = function()
+    local dbg = get_debugger()
+    if dbg.path == "" then
+      vim.notify("DAP: cppdbg(gdb/lldb) not found in PATH", vim.log.levels.WARN)
+      return nil
+    end
+    return {
+      name = "Launch (cppdbg)",
+      type = "cppdbg",
+      request = "launch",
+      program = function()
+        return vim.fn.input(
+          "Executable: ",
+          vim.fs.joinpath(vim.fn.getcwd(), "build", ""),
+          "file"
+        )
+      end,
+      cwd = "${workspaceFolder}",
+      stopAtEntry = false,
+      MIMode = dbg.mode, -- "gdb" or "lldb"
+      miDebuggerPath = dbg.path,
+      setupCommands = {
+        {
+          description = "Enable pretty-printing",
+          text = "-enable-pretty-printing",
+          ignoreFailures = true,
+        },
+      },
+    }
+  end,
 }
 
 function M.setup()
   local ok_dap, dap = pcall(require, "dap")
   if not ok_dap then
-    vim.notify(
-      "DAP: Failed loading plugin nvim-dap",
-      vim.log.levels.ERROR
-    )
+    vim.notify("DAP: Failed loading plugin nvim-dap", vim.log.levels.ERROR)
     return
   end
 
@@ -29,9 +127,35 @@ function M.setup()
   mason_dap.setup({
     ensure_installed = servers,
     automatic_installation = true,
+    handlers = {},
   })
 
-  local ok_dap_virtual_text, dap_virtual_text = pcall(require, "nvim-dap-virtual-text")
+  local adapter_cpp = adapters[using_cpp]()
+  if not adapter_cpp then
+    vim.notify(
+      "DAP: Failed locate adapter for " .. using_cpp,
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  dap.adapters[using_cpp] = adapter_cpp
+
+  local config_cpp = configurations[using_cpp]()
+  if not config_cpp then
+    vim.notify(
+      "DAP: Failed locate configuration for " .. using_cpp,
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  dap.configurations.cpp = { config_cpp }
+  dap.configurations.c = { config_cpp }
+  dap.configurations.rust = { config_cpp }
+
+  local ok_dap_virtual_text, dap_virtual_text =
+    pcall(require, "nvim-dap-virtual-text")
   if not ok_dap_virtual_text then
     vim.notify(
       "DAP: Failed loading plugin nvim-dap-virtual-text",
@@ -108,26 +232,10 @@ function M.setup()
   )
 
   -- Breakpoint navigation
-  map(
-    "n",
-    "]b",
-    function()
-      dap.jump_to_breakpoint(1)
-    end,
-    vim.tbl_extend("force", opts, { desc = "Jump to next debug breakpoint" })
-  )
-  map(
-    "n",
-    "[b",
-    function()
-      dap.jump_to_breakpoint(-1)
-    end,
-    vim.tbl_extend(
-      "force",
-      opts,
-      { desc = "Jump to previous debug breakpoint" }
-    )
-  )
+  map("n", "<leader>bl", function()
+    dap.list_breakpoints()
+    vim.cmd("copen")
+  end, vim.tbl_extend("force", opts, { desc = "List breakpoints (quickfix)" }))
 
   -- stack frame navigation
   map(
