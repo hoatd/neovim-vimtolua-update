@@ -71,9 +71,12 @@ function M.setup()
     -- Common dependencies
     { src = "https://github.com/nvim-lua/plenary.nvim" }, -- Helper lua functions
 
+    -- Common icons
+    { src = "https://github.com/nvim-mini/mini.icons" },
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" }, -- Icons
+
     -- UI components
     { src = "https://github.com/Mofiqul/dracula.nvim" }, -- Dracula theme
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" }, -- Icons
     { src = "https://github.com/nvim-lualine/lualine.nvim" }, -- Statusline
     { src = "https://github.com/nanozuki/tabby.nvim" }, -- Tabline
 
@@ -132,6 +135,31 @@ function M.setup()
 
   -- Plugin setups
   --
+  -- Mini icons
+  local ok_mini_icons, mini_icons = pcall(require, "mini.icons")
+  if ok_mini_icons then
+    mini_icons.setup({})
+  else
+    vim.notify(
+      "Plugin: Mini.icons failed setting up: "
+        .. (mini_icons or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
+
+  -- Devicons
+  local ok_devicons, devicons = pcall(require, "nvim-web-devicons")
+  if ok_devicons then
+    devicons.setup({
+      default = true,
+    })
+  else
+    vim.notify(
+      "Plugin: Devicons failed setting up: " .. (devicons or "unknown error"),
+      vim.log.levels.WARN
+    )
+  end
+
   -- Dracula colorscheme
   local ok_dracula, dracula = pcall(require, "dracula")
   if ok_dracula then
@@ -146,19 +174,6 @@ function M.setup()
   else
     vim.notify(
       "Plugin: Dracula failed setting up: " .. (dracula or "unknown error"),
-      vim.log.levels.WARN
-    )
-  end
-
-  -- Devicons
-  local ok_devicons, devicons = pcall(require, "nvim-web-devicons")
-  if ok_devicons then
-    devicons.setup({
-      default = true,
-    })
-  else
-    vim.notify(
-      "Plugin: Devicons failed setting up: " .. (devicons or "unknown error"),
       vim.log.levels.WARN
     )
   end
