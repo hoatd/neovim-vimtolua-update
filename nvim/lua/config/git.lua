@@ -122,6 +122,71 @@ function M.setup()
             { desc = "Preview current hunk inline" }
           )
         )
+
+        map(
+          "n",
+          "<leader>hS",
+          gitsigns.stage_buffer,
+          vim.tbl_extend("force", opts, { desc = "Stage all hunks" })
+        )
+        map(
+          "n",
+          "<leader>hR",
+          gitsigns.reset_buffer,
+          vim.tbl_extend("force", opts, { desc = "Reset all hunks" })
+        )
+
+        map("n", "<leader>hb", function()
+          gitsigns.blame_line({ full = true })
+        end, vim.tbl_extend("force", opts, { desc = "Blame line" }))
+
+        map(
+          "n",
+          "<leader>hd",
+          gitsigns.diffthis,
+          vim.tbl_extend("force", opts, { desc = "Git diffthis vs index" })
+        )
+
+        map("n", "<leader>hD", function()
+          gitsigns.diffthis("~")
+        end, vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Git diffthis vs base" }
+        ))
+
+        map(
+          "n",
+          "<leader>hQ",
+          function()
+            gitsigns.setqflist("all")
+          end,
+          vim.tbl_extend("force", opts, { desc = "List all hunks to quickfix" })
+        )
+        map(
+          "n",
+          "<leader>hq",
+          gitsigns.setqflist,
+          vim.tbl_extend(
+            "force",
+            opts,
+            { desc = "List all hunks current buffer to quickfix" }
+          )
+        )
+
+        -- Toggles
+        map(
+          "n",
+          "<leader>tb",
+          gitsigns.toggle_current_line_blame,
+          vim.tbl_extend("force", opts, { desc = "Togge current line blame" })
+        )
+        map(
+          "n",
+          "<leader>tw",
+          gitsigns.toggle_word_diff,
+          vim.tbl_extend("force", opts, { desc = "Togge word diff" })
+        )
       end,
     })
   else
