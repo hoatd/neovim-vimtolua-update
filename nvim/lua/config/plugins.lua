@@ -135,6 +135,9 @@ function M.setup()
     { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
     { src = "https://github.com/rcarriga/nvim-dap-ui" },
     { src = "https://github.com/igorlfs/nvim-dap-view" },
+
+    -- AI
+    { src = "https://github.com/github/copilot.vim.git" }, -- Github's copilot
   })
 
   -- Plugin setups
