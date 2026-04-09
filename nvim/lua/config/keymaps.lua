@@ -7,10 +7,20 @@ function M.setup()
   local map = vim.keymap.set
   local opts = { silent = true }
 
-  -- remap prefix keys
+  -- remap prefix keys normal mode
   if vim.g.keyboard_layout == "de" then
-    map("n", "ü", "[", { remap = true })
-    map("n", "+", "]", { remap = true })
+    map(
+      "n",
+      "ü",
+      "[",
+      vim.tbl_extend("force", opts, { remap = true, desc = "Remapped ü -> [" })
+    )
+    map(
+      "n",
+      "+",
+      "]",
+      vim.tbl_extend("force", opts, { remap = true, desc = "Remapped + -> ]" })
+    )
   end
 
   -- ============================================================
