@@ -2,8 +2,8 @@
 
 local M = {}
 
--- local using_cpp = "codelldb"
-local using_cpp = "cppdbg"
+local using_cpp = "codelldb"
+-- local using_cpp = "cppdbg"
 
 local servers = {
   "python",
@@ -153,6 +153,26 @@ function M.setup()
   dap.configurations.cpp = { config_cpp }
   dap.configurations.c = { config_cpp }
   dap.configurations.rust = { config_cpp }
+
+  local ok_dap_ui, dap_ui = pcall(require, "dapui")
+  if not ok_dap_ui then
+    vim.notify("DAP: Failed loading plugin nvim-dapui", vim.log.levels.WARN)
+  else
+    dap_ui.setup()
+  end
+
+  local ok_dap_view, dap_view = pcall(require, "dap-view")
+  if not ok_dap_view then
+    vim.notify("DAP: Failed loading plugin nvim-dap-view", vim.log.levels.WARN)
+  else
+    dap_view.setup({
+      winbar = {
+        controls = {
+          -- enabled = true,
+        },
+      },
+    })
+  end
 
   local ok_dap_virtual_text, dap_virtual_text =
     pcall(require, "nvim-dap-virtual-text")

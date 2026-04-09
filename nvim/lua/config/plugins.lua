@@ -70,6 +70,7 @@ function M.setup()
   vim.pack.add({
     -- Common dependencies
     { src = "https://github.com/nvim-lua/plenary.nvim" }, -- Helper lua functions
+    { src = "https://github.com/nvim-neotest/nvim-nio" }, -- Asynchronous IO functions
 
     -- Common icons
     { src = "https://github.com/nvim-mini/mini.icons" },
@@ -132,6 +133,8 @@ function M.setup()
     { src = "https://github.com/mfussenegger/nvim-dap" },
     { src = "https://github.com/jay-babu/mason-nvim-dap.nvim" },
     { src = "https://github.com/theHamsta/nvim-dap-virtual-text" },
+    { src = "https://github.com/rcarriga/nvim-dap-ui" },
+    { src = "https://github.com/igorlfs/nvim-dap-view" },
   })
 
   -- Plugin setups
