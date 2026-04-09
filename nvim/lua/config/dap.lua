@@ -167,10 +167,23 @@ function M.setup()
   else
     dap_view.setup({
       winbar = {
+        sections = {
+          "watches",
+          "scopes",
+          "exceptions",
+          "breakpoints",
+          "threads",
+          "repl",
+          "sessions",
+          "console",
+        },
+        default_section = "scopes",
         controls = {
           -- enabled = true,
         },
       },
+      auto_toggle = true,
+      -- follow_tab = true,
     })
   end
 
