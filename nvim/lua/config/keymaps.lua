@@ -9,7 +9,7 @@ function M.setup()
 
   -- remap prefix keys
   if vim.g.keyboard_layout == "de" then
-    map("n", "ä", "[", { remap = true })
+    map("n", "ü", "[", { remap = true })
     map("n", "+", "]", { remap = true })
   end
 
