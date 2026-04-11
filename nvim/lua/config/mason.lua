@@ -31,15 +31,7 @@ function M.setup()
     vim.notify("Plugin: Failed loading plugin mason", vim.log.levels.ERROR)
     return
   end
-  mason.setup({
-    ui = {
-      icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗",
-      },
-    },
-  })
+  mason.setup()
 end
 
 return M
