@@ -138,6 +138,10 @@ function M.setup()
 
     -- AI
     { src = "https://github.com/github/copilot.vim.git" }, -- Github's copilot
+    {
+      src = "https://www.github.com/olimorris/codecompanion.nvim",
+      version = vim.version.range("^19.0.0"),
+    }, -- Code Companion, a local LLM client
   })
 
   -- Plugin setups
