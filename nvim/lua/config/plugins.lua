@@ -136,7 +136,6 @@ function M.setup()
     { src = "https://github.com/igorlfs/nvim-dap-view" },
 
     -- AI
-    { src = "https://github.com/github/copilot.vim.git" }, -- Github's copilot
     {
       src = "https://www.github.com/olimorris/codecompanion.nvim",
       version = vim.version.range("^19.0.0"),
