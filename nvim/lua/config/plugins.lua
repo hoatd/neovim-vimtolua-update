@@ -136,10 +136,8 @@ function M.setup()
     { src = "https://github.com/igorlfs/nvim-dap-view" },
 
     -- AI
-    {
-      src = "https://www.github.com/olimorris/codecompanion.nvim",
-      version = vim.version.range("^19.0.0"),
-    }, -- Code Companion, a local LLM client
+    { src = "https://github.com/zbirenbaum/copilot.lua" }, -- Copilot lua
+    { src = "https://www.github.com/olimorris/codecompanion.nvim" }, -- CodeCompanion
   })
 
   -- Plugin setups
