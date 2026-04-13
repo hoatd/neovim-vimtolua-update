@@ -4,9 +4,6 @@ local M = {}
 
 local diag = vim.diagnostic
 
---- Setup default diagnostic highlights (virtual text, signs)
-local function setup_highlights() end
-
 local function setup_trouble()
   local ok_trouble, trouble = pcall(require, "trouble")
   if not ok_trouble then
@@ -162,7 +159,6 @@ function M.setup()
     update_in_insert = false, -- Do not update diagnostics while typing
     severity_sort = true, -- Sort by severity: Error > Warn > Info > Hint
   })
-  setup_highlights()
   setup_trouble()
 end
 
