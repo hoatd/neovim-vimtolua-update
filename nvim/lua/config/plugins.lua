@@ -102,7 +102,6 @@ function M.setup()
     { src = "https://github.com/NeogitOrg/neogit" }, -- Git UI
     { src = "https://github.com/lewis6991/gitsigns.nvim" }, -- Git signs + hunk actions
     { src = "https://github.com/sindrets/diffview.nvim" }, -- Side-by-side diff viewer
-    { src = "https://github.com/folke/trouble.nvim" }, -- Optional diagnostics UI
 
     --
     { src = "https://github.com/folke/persistence.nvim" }, -- Session manager

@@ -4,53 +4,6 @@ local M = {}
 
 local diag = vim.diagnostic
 
-local function setup_trouble()
-  local ok_trouble, trouble = pcall(require, "trouble")
-  if not ok_trouble then
-    vim.notify(
-      "Plugin: Trouble failed setting up: " .. (trouble or "unknown error"),
-      vim.log.levels.WARN
-    )
-    return
-  end
-  trouble.setup({
-    auto_open = false,
-    auto_close = true,
-  })
-
-  -- -- Trouble keymaps
-  -- local map = vim.keymap.set
-  -- local opts = { silent = true }
-  -- map(
-  --   "n",
-  --   "<leader>xx",
-  --   "<cmd>Trouble diagnostics toggle<CR>",
-  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble diagnostics" })
-  -- )
-  -- map(
-  --   "n",
-  --   "<leader>xb",
-  --   "<cmd>Trouble diagnostics toggle filter.buf=0<CR>",
-  --   vim.tbl_extend(
-  --     "force",
-  --     opts,
-  --     { desc = "Toggle Trouble buffer diagnostics" }
-  --   )
-  -- )
-  -- map(
-  --   "n",
-  --   "<leader>xl",
-  --   "<cmd>Trouble loclist toggle<CR>",
-  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble location list" })
-  -- )
-  -- map(
-  --   "n",
-  --   "<leader>xq",
-  --   "<cmd>Trouble qflist toggle<CR>",
-  --   vim.tbl_extend("force", opts, { desc = "Toggle Trouble quickfix" })
-  -- )
-end
-
 --- Setup buffer-local diagnostic keymaps
 -- @param bufnr buffer number
 function M.setup_keymaps(bufnr)
@@ -159,7 +112,6 @@ function M.setup()
     update_in_insert = false, -- Do not update diagnostics while typing
     severity_sort = true, -- Sort by severity: Error > Warn > Info > Hint
   })
-  setup_trouble()
 end
 
 return M
