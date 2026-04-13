@@ -2,8 +2,6 @@
 
 local M = {}
 
-local diag = vim.diagnostic
-
 --- Setup buffer-local diagnostic keymaps
 -- @param bufnr buffer number
 function M.setup_keymaps(bufnr)
@@ -75,7 +73,7 @@ local diagnostic_icons = build_diagnostic_sign_icons()
 
 --- Main setup function
 function M.setup()
-  diag.config({
+  vim.diagnostic.config({
     underline = true, -- Underline problematic text
     virtual_text = {
       prefix = function(diagnostic)
