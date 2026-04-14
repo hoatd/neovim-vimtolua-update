@@ -120,14 +120,16 @@ local function on_attach(client, bufnr)
   -- end
 
   local utils = require("utils")
-  vim.notify(
-    "LSP started for "
-      .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
-      .. " ("
-      .. client.name
-      .. ")",
-    vim.log.levels.INFO
-  )
+  vim.schedule(function()
+    vim.notify(
+      "LSP started for "
+        .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
+        .. " ("
+        .. client.name
+        .. ")",
+      vim.log.levels.INFO
+    )
+  end)
 end
 
 return {
