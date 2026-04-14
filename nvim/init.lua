@@ -1,18 +1,27 @@
 -- init.lua
--- Load Lua modules
 
+-- Pure Neovim config (no plugin dependency)
 require("config.options").setup()
 require("config.keymaps").setup()
 require("config.autocmds").setup()
-require("config.plugins").setup()
-require("config.ui").setup()
-require("config.git").setup()
-require("config.treesitter").setup()
-require("config.snippets").setup()
-require("config.mason").setup()
-require("config.lsp").setup()
 require("config.diagnostics").setup()
-require("config.completion").setup()
-require("config.dap").setup()
-require("config.copilot").setup()
-require("config.codecompanion").setup()
+
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Load plugins from lua/plugins/
+require("lazy").setup("plugins", {
+  change_detection = { notify = false },
+})
+

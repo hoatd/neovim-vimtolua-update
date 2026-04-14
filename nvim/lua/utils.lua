@@ -38,4 +38,53 @@ function M.get_buffer_names(bufnr, defaults)
   }
 end
 
+--- Apply a table of vim.opt options
+-- @param tbl: key-value pairs table for options
+--        If value is a single string/number, it will be applied directly
+--        If value is a table, it will be joined with "," or "" for string flags
+function M.apply_vim_options(tbl)
+  local string_flags = {
+    shortmess = true,
+    formatoptions = true,
+    cpoptions = true,
+  }
+  for k, v in pairs(tbl) do
+    if type(v) == "table" then
+      if string_flags[k] then
+        vim.opt[k] = table.concat(v, "")
+      else
+        vim.opt[k] = table.concat(v, ",")
+      end
+    else
+      vim.opt[k] = v
+    end
+  end
+end
+
+--- Append a table of values to existing vim.opt options
+-- @param tbl: table of key-value pairs
+function M.append_vim_options(tbl)
+  for k, v in pairs(tbl) do
+    if type(v) == "table" then
+      for _, val in ipairs(v) do
+        vim.opt[k]:append(val)
+      end
+    else
+      vim.opt[k]:append(v)
+    end
+  end
+end
+
+--- Ensure directories exist
+-- @param base_path: root path
+-- @param ...: list of directory names under base_path
+function M.ensure_dirs_exist(base_path, ...)
+  for _, name in ipairs({ ... }) do
+    local path = base_path .. "/" .. name
+    if vim.fn.isdirectory(path) == 0 then
+      vim.fn.mkdir(path, "p")
+    end
+  end
+end
+
 return M

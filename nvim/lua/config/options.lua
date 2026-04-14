@@ -9,58 +9,6 @@ local M = {}
 local data_path = vim.fn.stdpath("data") -- ~/.local/share/nvim
 
 -- ============================================================================
--- Helper functions
--- ============================================================================
--- Apply a table of options
--- @param tbl: key-value pairs table for options
---        If value is a single string/number, it will be applied directly
---        If value is a table, it will be joined with "," or "" for string flags
-local function apply_options(tbl)
-  local string_flags = {
-    shortmess = true,
-    formatoptions = true,
-    cpoptions = true,
-  }
-  for k, v in pairs(tbl) do
-    if type(v) == "table" then
-      if string_flags[k] then
-        vim.opt[k] = table.concat(v, "")
-      else
-        vim.opt[k] = table.concat(v, ",")
-      end
-    else
-      vim.opt[k] = v
-    end
-  end
-end
-
--- Append a table of values to existing options
--- @param tbl: table of key-value pairs
-local function append_options(tbl)
-  for k, v in pairs(tbl) do
-    if type(v) == "table" then
-      for _, val in ipairs(v) do
-        vim.opt[k]:append(val)
-      end
-    else
-      vim.opt[k]:append(v)
-    end
-  end
-end
-
--- Ensure directories exist
--- @param base_path: root path
--- @param ...: list of directory names under base_path
-local function ensure_dirs(base_path, ...)
-  for _, name in ipairs({ ... }) do
-    local path = base_path .. "/" .. name
-    if vim.fn.isdirectory(path) == 0 then
-      vim.fn.mkdir(path, "p")
-    end
-  end
-end
-
--- ============================================================================
 -- Core / Global options
 -- ============================================================================
 local core_opts = {
@@ -383,29 +331,30 @@ function M.setup()
   vim.g.mapleader = ","
   vim.g.maplocalleader = ","
 
+  local utils = require("utils")
   -- ============================================================================
   -- Data directories for swap, undo, backup, tags
   -- ============================================================================
-  ensure_dirs(data_path, "swap", "backup", "undo", "tags")
+  utils.ensure_dirs_exist(data_path, "swap", "backup", "undo", "tags")
 
   -- ============================================================================
   -- Using basic options
   -- ============================================================================
-  apply_options(core_opts)
-  apply_options(editing_opts)
-  append_options(editing_opts_append)
-  apply_options(display_opts)
-  append_options(display_opts_append)
-  apply_options(ui_opts)
-  apply_options(buffers_opts)
-  apply_options(files_opts)
-  apply_options(searching_opts)
-  append_options(find_path_opts)
-  apply_options(completion_opts)
-  apply_options(formatting_opts)
-  append_options(diff_opts)
-  apply_options(shada_opts)
-  apply_options(session_opts)
+  utils.apply_vim_options(core_opts)
+  utils.apply_vim_options(editing_opts)
+  utils.append_vim_options(editing_opts_append)
+  utils.apply_vim_options(display_opts)
+  utils.append_vim_options(display_opts_append)
+  utils.apply_vim_options(ui_opts)
+  utils.apply_vim_options(buffers_opts)
+  utils.apply_vim_options(files_opts)
+  utils.apply_vim_options(searching_opts)
+  utils.append_vim_options(find_path_opts)
+  utils.apply_vim_options(completion_opts)
+  utils.apply_vim_options(formatting_opts)
+  utils.append_vim_options(diff_opts)
+  utils.apply_vim_options(shada_opts)
+  utils.apply_vim_options(session_opts)
 end
 
 return M

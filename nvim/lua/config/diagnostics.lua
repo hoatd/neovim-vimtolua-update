@@ -73,6 +73,20 @@ local diagnostic_icons = build_diagnostic_sign_icons()
 
 --- Main setup function
 function M.setup()
+  -- Register diagnostic keymaps for every buffer where LSP attaches.
+  -- vim.diagnostic keymaps are not LSP-specific — they work with any
+  -- diagnostic source — but LspAttach is the right moment to set them
+  -- per-buffer since that is when a buffer becomes "LSP-aware".
+  local utils = require("utils")
+
+  vim.api.nvim_create_autocmd("LspAttach", {
+    group = utils.augroup("diagnostic_keymaps"),
+    callback = function(args)
+      M.setup_keymaps(args.buf)
+    end,
+    desc = "Set diagnostic keymaps when LSP attaches",
+  })
+
   vim.diagnostic.config({
     underline = true, -- Underline problematic text
     virtual_text = {
