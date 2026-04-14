@@ -196,32 +196,25 @@ local function register_buf_autocmd()
       return
     end
 
-    -- Only activate for langs with an installed parser
-    if not installed_langs[lang] then
-      vim.notify(
-        "TS: Skip filetype that is not installed (" .. lang .. ") for " .. name,
-        vim.log.levels.WARN
-      )
-      return
-    end
-
     -- Load parser, bail out on failure
-    local lang_ok, lang_err = pcall(vim.treesitter.language.add, lang)
-    if not lang_ok then
-      vim.notify(
-        "TS: Failed loading parser '"
-          .. lang
-          .. "' for "
-          .. name
-          .. " : "
-          .. (lang_err or "unknown error"),
-        vim.log.levels.WARN
-      )
+    local lang_ok, lang_add = pcall(vim.treesitter.language.add, lang)
+    if not lang_ok or not lang_add then
+      if installed_langs[lang] then
+        vim.notify(
+          "TS: Failed loading parser '"
+            .. lang
+            .. "' for "
+            .. name
+            .. " : "
+            .. (lang_add or "unknown error"),
+          vim.log.levels.WARN
+        )
+      end
       return
     end
 
     -- Start treesitter highlighting
-    local start_ok, start_err = pcall(vim.treesitter.start, buf, lang)
+    local start_ok, ts_start = pcall(vim.treesitter.start, buf, lang)
     if not start_ok then
       vim.notify(
         "TS: Failed to start '"
@@ -229,7 +222,7 @@ local function register_buf_autocmd()
           .. "' for "
           .. name
           .. " : "
-          .. (start_err or "unknown error"),
+          .. (ts_start or "unknown error"),
         vim.log.levels.WARN
       )
       return
@@ -248,11 +241,12 @@ local function register_buf_autocmd()
     setup_keymaps(buf)
 
     vim.b[buf].ts_started = true
-
-    vim.notify(
-      "TS started for " .. name .. " (" .. lang .. ")",
-      vim.log.levels.INFO
-    )
+    vim.schedule(function()
+      vim.notify(
+        "TS started for " .. name .. " (" .. lang .. ")",
+        vim.log.levels.INFO
+      )
+    end)
   end
 
   -- FileType fires before BufReadPost for files opened from disk; the
