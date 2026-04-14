@@ -67,7 +67,7 @@ end
 
 function M.setup()
   -- Register plugins
-  vim.pack.add({
+  local opts = {
     -- Common dependencies
     { src = "https://github.com/nvim-lua/plenary.nvim" }, -- Helper lua functions
     { src = "https://github.com/nvim-neotest/nvim-nio" }, -- Asynchronous IO functions
@@ -138,7 +138,8 @@ function M.setup()
     -- AI
     { src = "https://github.com/zbirenbaum/copilot.lua" }, -- Copilot lua
     { src = "https://www.github.com/olimorris/codecompanion.nvim" }, -- CodeCompanion
-  })
+  }
+  vim.pack.add(opts)
 
   -- Plugin setups
   --
