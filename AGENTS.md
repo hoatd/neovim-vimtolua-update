@@ -48,6 +48,10 @@ nvim/
         copilot.lua     # copilot.lua + copilot-lsp + sidekick.nvim
         codecompanion.lua
         opencode.lua    # opencode.nvim + snacks.nvim backend
+      completion/       # Subdirectory — auto-discovered via completion/init.lua
+        init.lua        # Dispatcher: vim.list_extend from cmp, blink
+        cmp.lua         # nvim-cmp + all sources (ENABLED = false when using blink)
+        blink.lua       # blink.cmp placeholder (enabled = false)
 ```
 
 **Subdirectory discovery:** lazy.nvim only auto-discovers a subdirectory when it contains `init.lua`. Plain `.lua` files in subdirs without `init.lua` are ignored.
