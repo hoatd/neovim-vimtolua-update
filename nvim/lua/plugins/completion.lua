@@ -95,8 +95,8 @@ return {
             end
           end, { "i" }),
 
-          -- Tab / S-Tab: snippet jump + completion navigation
-          ["<Tab>"] = cmp.mapping(function(fallback)
+          -- Snippet jump + completion navigation
+          ["<S-Right>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
             elseif luasnip.locally_jumpable(1) then
@@ -107,7 +107,7 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
+          ["<S-Left>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
             elseif luasnip.locally_jumpable(-1) then
