@@ -43,7 +43,14 @@ nvim/
       autocmds.lua
       diagnostics.lua
     plugins/            # One file per plugin group, each returns lazy.nvim spec tables
+      ai/               # Subdirectory — auto-discovered via ai/init.lua
+        init.lua        # Dispatcher: vim.list_extend from copilot, codecompanion, opencode
+        copilot.lua     # copilot.lua + copilot-lsp + sidekick.nvim
+        codecompanion.lua
+        opencode.lua    # opencode.nvim + snacks.nvim backend
 ```
+
+**Subdirectory discovery:** lazy.nvim only auto-discovers a subdirectory when it contains `init.lua`. Plain `.lua` files in subdirs without `init.lua` are ignored.
 
 ---
 
@@ -106,9 +113,13 @@ Treesitter is activated per-buffer via autocmds, not globally. Large-file guards
 
 ## AI plugins
 
-All AI integrations (`copilot.lua`, `sidekick.nvim`, `codecompanion.nvim`, `opencode.nvim`) are present in `lua/plugins/ai.lua` but disabled (`enabled = false`). The copilot spec targets a **GHE endpoint** (`https://straumann.ghe.com/`), not github.com.
+AI integrations live in `lua/plugins/ai/` (subdirectory). Each file is a separate lazy.nvim spec:
 
-To enable one: set `enabled = true` in its spec. For `opencode`, also uncomment the statusline line in `ui.lua`.
+- `ai/copilot.lua` — copilot.lua + copilot-lsp + sidekick.nvim; targets GHE endpoint (`https://straumann.ghe.com/`), `enabled = false`
+- `ai/codecompanion.lua` — codecompanion with copilot adapter, `enabled = false`
+- `ai/opencode.lua` — opencode.nvim + snacks.nvim terminal backend, **`enabled = true`**
+
+To enable copilot or codecompanion: set `enabled = true` in the respective file.
 
 ---
 
