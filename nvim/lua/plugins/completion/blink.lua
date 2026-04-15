@@ -19,13 +19,15 @@
 return {
   {
     "saghen/blink.cmp",
-    enabled = false,
+    enabled = true,
     version = "1.*",
     dependencies = {
       "L3MON4D3/LuaSnip",
     },
     opts = {
-      -- TODO: translate full config from nvim_cmp.lua
+      completion = {
+        documentation = { auto_show = true },
+      },
     },
   },
 }
