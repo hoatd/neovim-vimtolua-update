@@ -283,7 +283,7 @@ return {
         },
         default_section = "scopes",
         controls = {
-          -- enabled = true,
+          enabled = true,
         },
       },
       auto_toggle = true,
