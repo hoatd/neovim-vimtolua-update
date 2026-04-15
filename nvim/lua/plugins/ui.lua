@@ -95,8 +95,7 @@ return {
       },
       sections = {
         lualine_x = {
-          -- opencode statusline (uncomment when opencode is enabled in ai.lua)
-          -- require("opencode").statusline,
+          require("opencode").statusline,
           "encoding",
           "fileformat",
           "filetype",
