@@ -26,6 +26,7 @@ return {
     },
     opts = {
       completion = {
+        ghost_text = { enabled = true, show_without_selection = true },
         documentation = { auto_show = true },
       },
     },
