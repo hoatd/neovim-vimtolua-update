@@ -159,8 +159,8 @@ return {
           capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
         end
       end
-      capabilities.general = capabilities.general or {}
-      capabilities.general.positionEncodings = { "utf-16" }
+      -- capabilities.general = capabilities.general or {}
+      -- capabilities.general.positionEncodings = { "utf-16" }
 
       -- Configure and enable each managed server
       local function configure(server_name)
