@@ -1,13 +1,13 @@
--- lua/plugins/completion.lua
--- Completion engine, all sources, snippet bridge, and icon formatting.
+-- lua/plugins/completion/cmp.lua
+-- nvim-cmp completion engine + all sources.
+
+-- Toggle: set to false when using blink.cmp
+local ENABLED = false
 
 return {
-  -- ============================================================
-  -- nvim-cmp: completion engine
-  -- ============================================================
   {
     "hrsh7th/nvim-cmp",
-    enabled = true,
+    enabled = ENABLED,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
@@ -67,14 +67,6 @@ return {
         --     winhighlight = "Normal:Pmenu,FloatBorder:PmenuBorder",
         --     border = "rounded",
         --   }),
-        -- },
-
-        -- Custom entry view (uncomment to enable)
-        -- view = {
-        --   entries = {
-        --     name = "custom",           -- "custom" | "wildmenu" | "native"
-        --     selection_order = "near_cursor",
-        --   },
         -- },
 
         mapping = cmp.mapping.preset.insert({
@@ -154,16 +146,16 @@ return {
   },
 
   -- Sources (loaded as dependencies of nvim-cmp above, listed here for clarity)
-  { "hrsh7th/cmp-nvim-lsp", enabled = true, lazy = true },
-  { "hrsh7th/cmp-buffer", enabled = true, lazy = true },
-  { "hrsh7th/cmp-path", enabled = true, lazy = true },
-  { "hrsh7th/cmp-cmdline", enabled = true, lazy = true },
+  { "hrsh7th/cmp-nvim-lsp", enabled = ENABLED, lazy = true },
+  { "hrsh7th/cmp-buffer", enabled = ENABLED, lazy = true },
+  { "hrsh7th/cmp-path", enabled = ENABLED, lazy = true },
+  { "hrsh7th/cmp-cmdline", enabled = ENABLED, lazy = true },
   {
     "petertriho/cmp-git",
-    enabled = true,
+    enabled = ENABLED,
     lazy = true,
     dependencies = { "nvim-lua/plenary.nvim" },
   },
-  { "saadparwaiz1/cmp_luasnip", enabled = true, lazy = true },
-  { "onsails/lspkind.nvim", enabled = true, lazy = true },
+  { "saadparwaiz1/cmp_luasnip", enabled = ENABLED, lazy = true },
+  { "onsails/lspkind.nvim", enabled = ENABLED, lazy = true },
 }

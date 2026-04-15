@@ -140,11 +140,19 @@ return {
     dependencies = {
       "mason-org/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp", -- provides extended capabilities
     },
     config = function()
-      -- Build capabilities (extended with cmp-nvim-lsp)
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      -- Build capabilities; extend with whichever completion engine is active
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local ok_blink, blink = pcall(require, "blink.cmp")
+      if ok_blink then
+        capabilities = blink.get_lsp_capabilities(capabilities)
+      else
+        local ok_cmp_nvim_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+        if ok_cmp_nvim_lsp then
+          capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+        end
+      end
       capabilities.general = capabilities.general or {}
       capabilities.general.positionEncodings = { "utf-16" }
 
