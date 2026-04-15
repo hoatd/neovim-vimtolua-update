@@ -56,7 +56,6 @@ local server_configs = {
 
 -- ============================================================
 -- LSP keymaps (set per-buffer on attach)
--- Currently defined but not called — uncomment the call in on_attach to activate.
 -- ============================================================
 local function setup_keymaps(bufnr)
   bufnr = bufnr or 0
@@ -111,8 +110,7 @@ end
 -- on_attach: called when an LSP server attaches to a buffer
 -- ============================================================
 local function on_attach(client, bufnr)
-  -- Uncomment to activate LSP keymaps per buffer:
-  -- setup_keymaps(bufnr)
+  setup_keymaps(bufnr)
 
   -- Uncomment to enable inlay hints when the server supports them:
   -- if client.server_capabilities.inlayHintProvider then
