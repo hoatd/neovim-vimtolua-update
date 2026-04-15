@@ -107,7 +107,7 @@ local configurations = {
       program = function()
         return vim.fn.input(
           "Executable: ",
-          vim.fs.joinpath(vim.fn.getcwd(), "build", ""),
+          vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
           "file"
         )
       end,
@@ -130,7 +130,7 @@ local configurations = {
       program = function()
         return vim.fn.input(
           "Executable: ",
-          vim.fs.joinpath(vim.fn.getcwd(), "build", ""),
+          vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
           "file"
         )
       end,
