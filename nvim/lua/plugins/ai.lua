@@ -11,10 +11,10 @@ return {
     enabled = false,
     event = "InsertEnter",
     config = function()
-      require("copilot").setup({
+      local opts = {
         panel = {
-          enabled = true,
-          -- enabled = false,
+          -- enabled = true,
+          enabled = false,
           -- auto_refresh = false,
           -- keymap = {
           --   jump_prev = "[[",
@@ -36,13 +36,13 @@ return {
           -- debounce = 15,
           -- trigger_on_accept = true,
           keymap = {
-            -- accept = "<M-l>",
+            accept = "<M-l>",
             accept_word = "<M-Right>",
             accept_line = "<M-Down>",
-            -- next = "<M-]>",
-            -- prev = "<M-[>",
-            -- dismiss = "<C-]>",
-            -- toggle_auto_trigger = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+            toggle_auto_trigger = false,
           },
         },
         nes = {
@@ -89,7 +89,8 @@ return {
         --   custom_server_filepath = nil,
         -- },
         -- server_opts_overrides = {},
-      })
+      }
+      require("copilot").setup(opts)
     end,
   },
 
@@ -104,11 +105,12 @@ return {
     "copilotlsp-nvim/copilot-lsp",
     enabled = false,
     config = function()
-      require("copilot-lsp").setup({
+      local opts = {
         nes = {
           move_count_threshold = 3,  -- clear suggestion after 3 cursor moves
         },
-      })
+      }
+      require("copilot-lsp").setup(opts)
     end,
   },
 
@@ -120,7 +122,7 @@ return {
     "folke/sidekick.nvim",
     enabled = false,
     config = function()
-      require("sidekick").setup({
+      local opts = {
         nes = { enabled = true },
         cli = {
           mux = {
@@ -129,19 +131,20 @@ return {
             create = "terminal",
           },
           tools = {
-            claude = {},
+            -- claude = {},
           },
         },
         copilot = {
           status = { enabled = true },
         },
-      })
+      }
+      require("sidekick").setup(opts)
 
       -- Navigate to / apply the active Next Edit Suggestion.
-      -- Falls back to a literal <Tab> if no suggestion is active.
-      vim.keymap.set({ "n", "i" }, "<Tab>", function()
+      -- Falls back to a literal <M-p> if no suggestion is active.
+      vim.keymap.set({ "n", "i" }, "<M-p>", function()
         if not require("sidekick").nes_jump_or_apply() then
-          return "<Tab>"
+          return "<M-p>"
         end
       end, { expr = true, desc = "NES: goto / apply next edit suggestion" })
     end,
@@ -156,7 +159,7 @@ return {
     enabled = false,
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("codecompanion").setup({
+      local opts = {
         -- interactions = {
         --   chat = {
         --     adapter = "copilot_acp",
@@ -165,7 +168,8 @@ return {
         --     adapter = "copilot",
         --   },
         -- },
-      })
+      }
+      require("codecompanion").setup(opts)
     end,
   },
 
@@ -182,11 +186,11 @@ return {
       -- The plugin auto-discovers running opencode instances via pgrep + lsof,
       -- as long as they were started with --port (any port number).
       vim.g.opencode_opts = {
-        server = {
-          -- start = false,
-          -- stop = false,
-          -- toggle = false,
-        },
+        -- server = {
+        --   -- start = false,
+        --   -- stop = false,
+        --   -- toggle = false,
+        -- },
       }
       require("opencode")
     end,
