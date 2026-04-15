@@ -100,17 +100,17 @@ return {
   -- Sign in: :LspCopilotSignIn
   -- Enable together with nes.enabled = true in copilot.lua above.
   -- ============================================================
-  -- {
-  --   "copilotlsp-nvim/copilot-lsp",
-  --   enabled = false,
-  --   config = function()
-  --     require("copilot-lsp").setup({
-  --       nes = {
-  --         move_count_threshold = 3,  -- clear suggestion after 3 cursor moves
-  --       },
-  --     })
-  --   end,
-  -- },
+  {
+    "copilotlsp-nvim/copilot-lsp",
+    enabled = false,
+    config = function()
+      require("copilot-lsp").setup({
+        nes = {
+          move_count_threshold = 3,  -- clear suggestion after 3 cursor moves
+        },
+      })
+    end,
+  },
 
   -- ============================================================
   -- Sidekick: NES + CLI tools integration (Zellij mux backend)
