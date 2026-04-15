@@ -45,7 +45,13 @@ local server_configs = {
           globals = { "vim" },
         },
         workspace = {
-          library = vim.api.nvim_get_runtime_file("", true),
+          library = vim.list_extend(vim.api.nvim_get_runtime_file("", true),
+          -- Extend paths to below plugins to prevent some diagnostics messages
+          -- in the plugins/ai/opencode.lua relate lua annotations
+          {
+            vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
+            vim.fn.stdpath("data") .. "/lazy/opencode.nvim/lua",
+          }),
         },
       },
     },
