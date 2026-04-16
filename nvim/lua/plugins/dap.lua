@@ -58,6 +58,26 @@ local function resolve_platform_aware_debugger_mi_mode()
   end
 end
 
+--- Prompt the user for a launch executable path via a floating input.
+--- Uses vim.ui.input (intercepted session-wide by snacks.nvim when
+--- `input = {}` is set in its opts — configured in plugins/ai/opencode.lua).
+--- Bridges the async callback to a synchronous return via coroutine
+--- yield/resume, which DAP requires because `program` must return a value.
+--- assert(coroutine.running()) guards against accidental calls outside a
+--- coroutine context; nvim-dap always invokes program() inside one.
+---@return string|nil # Absolute path entered by the user, or nil if cancelled.
+local input_launch_program = function()
+  local co = assert(coroutine.running())
+  vim.ui.input({
+    prompt = "Executable: ",
+    default = vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
+    completion = "file",
+  }, function(value)
+    coroutine.resume(co, value)
+  end)
+  return coroutine.yield()
+end
+
 -- ============================================================
 -- Adapter factories (resolved at runtime after mason installs)
 -- ============================================================
@@ -104,13 +124,7 @@ local configurations = {
       name = "Launch (codelldb)",
       type = "codelldb",
       request = "launch",
-      program = function()
-        return vim.fn.input(
-          "Executable: ",
-          vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
-          "file"
-        )
-      end,
+      program = input_launch_program,
       cwd = "${workspaceFolder}",
       stopOnEntry = false,
     }
@@ -127,13 +141,7 @@ local configurations = {
       name = "Launch (cppdbg)",
       type = "cppdbg",
       request = "launch",
-      program = function()
-        return vim.fn.input(
-          "Executable: ",
-          vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
-          "file"
-        )
-      end,
+      program = input_launch_program,
       cwd = "${workspaceFolder}",
       stopAtEntry = false,
       MIMode = dbg.mode, -- "gdb" or "lldb"
