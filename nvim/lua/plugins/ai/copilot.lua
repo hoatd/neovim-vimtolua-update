@@ -1,8 +1,9 @@
 -- lua/plugins/ai/copilot.lua
--- Copilot stack: copilot.lua + copilot-lsp (NES backend) + sidekick (NES UI).
+-- Copilot stack: copilot.lua + copilot-lsp (NES backend).
+-- sidekick.nvim lives in ai/sidekick.lua (independent module).
 --
--- Enable all three together:
---   1. Set enabled = true on all three specs below
+-- Enable NES workflow:
+--   1. Set enabled = true on both specs below
 --   2. Set nes.enabled = true in copilot.lua opts
 --   3. Install the LSP: :MasonInstall copilot-language-server
 --      or: npm install -g @github/copilot-language-server
@@ -79,40 +80,6 @@ return {
           move_count_threshold = 3, -- clear suggestion after 3 cursor moves
         },
       })
-    end,
-  },
-
-  -- ============================================================
-  -- sidekick.nvim: NES UI + CLI tools (Zellij mux backend)
-  -- Must be enabled together with copilot.lua and copilot-lsp.
-  -- ============================================================
-  {
-    "folke/sidekick.nvim",
-    enabled = false,
-    dependencies = {
-      "zbirenbaum/copilot.lua",
-      "copilotlsp-nvim/copilot-lsp",
-    },
-    config = function()
-      require("sidekick").setup({
-        nes = { enabled = true },
-        cli = {
-          mux = {
-            backend = "zellij",
-            enabled = true,
-            create = "terminal",
-          },
-        },
-        copilot = {
-          status = { enabled = true },
-        },
-      })
-
-      -- Apply / navigate the active Next Edit Suggestion.
-      -- <M-p> is a no-op when no suggestion is active.
-      vim.keymap.set({ "n", "i" }, "<M-p>", function()
-        require("sidekick").nes_jump_or_apply()
-      end, { desc = "NES: goto / apply next edit suggestion" })
     end,
   },
 }
