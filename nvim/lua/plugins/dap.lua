@@ -338,7 +338,7 @@ local adapters = {
 -- Launch configuration factories
 -- ============================================================
 local configurations = {
-  -- cppdbg launch configuration (used when cpp_backend = "codelldb")
+  -- codelldb launch configuration (used when cpp_backend = "codelldb")
   codelldb = function()
     return {
       name = "Launch (codelldb)",
@@ -350,7 +350,7 @@ local configurations = {
     }
   end,
 
-  -- cppdbg launch configuration (used when cpp_backend = "cppdbg")
+  -- cppdbg launch configuration (used when cpp_backend = "cppdbg", alternative to codelldb — requires cpptools)
   cppdbg = function()
     local dbg = resolve_platform_aware_debugger_mi_mode()
     if dbg.path == "" then
@@ -440,6 +440,28 @@ return {
         "<F5>",
         dap.continue,
         vim.tbl_extend("force", opts, { desc = "Debug: start / continue" })
+      )
+      map(
+        "n",
+        "<C-F5>",
+        function()
+          -- If a valid cached program exists, launch it directly without prompts.
+          -- Falls back to dap.continue() (normal F5) if the cache is empty or stale.
+          local cached = get_cached_launch_program()
+          if cached and vim.fn.executable(cached) == 1 then
+            local base = (dap.configurations.cpp or {})[1]
+            if base then
+              dap.run(vim.tbl_extend("force", base, { program = cached }))
+              return
+            end
+          end
+          dap.continue()
+        end,
+        vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Debug: launch cached program (fallback: F5)" }
+        )
       )
       map(
         "n",
