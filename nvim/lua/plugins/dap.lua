@@ -58,6 +58,21 @@ local function resolve_platform_aware_debugger_mi_mode()
   end
 end
 
+--- Scan build/ for the first executable file produced by CMake.
+--- Used to pre-fill the launch prompt so the user rarely needs to type.
+---@return string|nil # Absolute path to the first executable found, or nil.
+local function resolve_cmake_program()
+  local build = vim.fs.joinpath(vim.fn.getcwd(), "build")
+  for name, type in vim.fs.dir(build) do
+    if type == "file" then
+      local path = vim.fs.joinpath(build, name)
+      if vim.fn.executable(path) == 1 then
+        return path
+      end
+    end
+  end
+end
+
 --- Prompt the user for a launch executable path via a floating input.
 --- Uses vim.ui.input (intercepted session-wide by snacks.nvim when
 --- `input = {}` is set in its opts — configured in plugins/ai/opencode.lua).
@@ -65,17 +80,61 @@ end
 --- yield/resume, which DAP requires because `program` must return a value.
 --- assert(coroutine.running()) guards against accidental calls outside a
 --- coroutine context; nvim-dap always invokes program() inside one.
----@return string|nil # Absolute path entered by the user, or nil if cancelled.
-local input_launch_program = function()
+---@param default string Pre-filled path shown in the input.
+---@return string|nil # Confirmed executable path, or nil if cancelled.
+local function input_launch_program(default)
   local co = assert(coroutine.running())
   vim.ui.input({
     prompt = "Executable: ",
-    default = vim.fs.joinpath(vim.fn.getcwd(), "build", "/"),
+    default = default,
     completion = "file",
   }, function(value)
     coroutine.resume(co, value)
   end)
   return coroutine.yield()
+end
+
+--- Read the cached launch program for the current project from vim.g.
+--- vim.g.dap_launch_cache is a cwd-keyed table persisted across sessions
+--- by folke/persistence.nvim via sessionoptions "globals".
+---@return string|nil
+local function get_cached_launch_program()
+  local cache = vim.g.dap_launch_cache
+  if type(cache) ~= "table" then
+    return nil
+  end
+  return cache[vim.fn.getcwd()]
+end
+
+--- Persist the confirmed launch program for the current project into vim.g.
+---@param path string
+local function set_cached_launch_program(path)
+  local cache = vim.g.dap_launch_cache
+  if type(cache) ~= "table" then
+    cache = {}
+  end
+  cache[vim.fn.getcwd()] = path
+  vim.g.dap_launch_cache = cache
+end
+
+--- Resolve the launch executable via cache → cmake scan → user input.
+--- Cache: last confirmed path, re-validated as executable each time.
+--- Cmake: scans build/ for the first executable file if cache is cold.
+--- Input: floating prompt pre-filled with the best candidate.
+---@return string|nil # Confirmed executable path, or nil if cancelled.
+local function select_launch_program()
+  local cached = get_cached_launch_program()
+  if cached and vim.fn.executable(cached) ~= 1 then
+    cached = nil
+  end
+  local default = cached
+    or resolve_cmake_program()
+    or vim.fs.joinpath(vim.fn.getcwd(), "build", "/")
+  local path = input_launch_program(default)
+  if path and path ~= "" then
+    set_cached_launch_program(path)
+  end
+  return path
 end
 
 -- ============================================================
@@ -124,7 +183,7 @@ local configurations = {
       name = "Launch (codelldb)",
       type = "codelldb",
       request = "launch",
-      program = input_launch_program,
+      program = select_launch_program,
       cwd = "${workspaceFolder}",
       stopOnEntry = false,
     }
@@ -141,7 +200,7 @@ local configurations = {
       name = "Launch (cppdbg)",
       type = "cppdbg",
       request = "launch",
-      program = input_launch_program,
+      program = select_launch_program,
       cwd = "${workspaceFolder}",
       stopAtEntry = false,
       MIMode = dbg.mode, -- "gdb" or "lldb"
