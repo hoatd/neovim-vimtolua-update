@@ -1,20 +1,52 @@
 -- lua/plugins/ai/copilot.lua
--- Copilot stack: copilot.lua + copilot-lsp (NES backend).
+-- Copilot stack: copilot.lua with copilot-lsp as dependency (NES backend).
 --
 -- Enable NES workflow:
---   1. Set enabled = true on both specs below
---   2. Set nes.enabled = true in copilot.lua opts
+--   1. Set enabled = true below
 --   2. Sign in: :LspCopilotSignIn
 
 return {
-  -- ============================================================
-  -- copilot.lua: Copilot suggestions + NES integration
-  -- ============================================================
   {
     "zbirenbaum/copilot.lua",
     enabled = true,
+    event = "VimEnter",
+    dependencies = {
+      -- ============================================================
+      -- copilot-lsp: NES language server backend
+      -- ============================================================
+      {
+        "copilotlsp-nvim/copilot-lsp",
+        init = function()
+          vim.g.copilot_nes_debounce = 100 -- Reduce NES request debounce (default: 500 ms)
+        end,
+        config = function()
+          require("copilot-lsp").setup({
+            nes = {
+              move_count_threshold = 3, -- clear suggestion after 3 cursor moves
+            },
+          })
+
+          local nes = require("copilot-lsp.nes")
+
+          -- Jump to the start of the pending NES edit
+          vim.keymap.set({ "n", "i" }, "<M-g>", function()
+            nes.walk_cursor_start_edit()
+          end, { desc = "NES: jump to edit location" })
+
+          -- Accept / apply the pending NES edit
+          vim.keymap.set({ "n", "i" }, "<M-a>", function()
+            nes.apply_pending_nes()
+          end, { desc = "NES: accept edit" })
+
+          -- Dismiss the pending NES edit
+          vim.keymap.set({ "n", "i" }, "<M-x>", function()
+            nes.clear()
+          end, { desc = "NES: dismiss edit" })
+        end,
+      },
+    },
     config = function()
-      local opts = {
+      require("copilot").setup({
         panel = {
           enabled = false,
         },
@@ -35,35 +67,13 @@ return {
           },
         },
         nes = {
-          -- Set enabled = true together with copilot-lsp below
           enabled = true,
           auto_trigger = true,
-          keymap = {
-            accept_and_goto = "<M-g>",
-            accept = "<M-a>",
-            dismiss = "<Esc>",
-          },
         },
-        -- GHE authentication endpoint (set nil for github.com)
-        -- auth_provider_url = nil,
-        auth_provider_url = "https://straumann.ghe.com/",
-      }
-      require("copilot").setup(opts)
-    end,
-  },
-
-  -- ============================================================
-  -- copilot-lsp: NES language server backend
-  -- Must be enabled together with nes.enabled = true above.
-  -- ============================================================
-  {
-    "copilotlsp-nvim/copilot-lsp",
-    enabled = true,
-    config = function()
-      require("copilot-lsp").setup({
-        nes = {
-          move_count_threshold = 3, -- clear suggestion after 3 cursor moves
-        },
+        -- GHE authentication endpoint
+        -- Using COPILOT_AUTH_PROVIDER_URL env variable (e.g. in .bashrc)
+        -- Unset or empty falls back to github.com.
+        auth_provider_url = vim.env.COPILOT_AUTH_PROVIDER_URL or nil,
       })
     end,
   },
