@@ -61,11 +61,55 @@ local function resolve_platform_aware_debugger_mi_mode()
   end
 end
 
+--- Resolve the CMake build directory for the current project.
+--- Resolution order:
+---   1. CMakePresets.json / CMakeUserPresets.json → first configurePreset.binaryDir
+---   2. Scan candidate directories for CMakeCache.txt (covers manual -B flags)
+---   3. Fall back to "build"
+--- The returned path is absolute.
+---@return string # Absolute path to the cmake build directory.
+local function resolve_cmake_build_dir()
+  local cwd = vim.fn.getcwd()
+
+  -- 1. CMakePresets: read binaryDir from the first configurePreset.
+  for _, fname in ipairs({ "CMakeUserPresets.json", "CMakePresets.json" }) do
+    local fpath = vim.fs.joinpath(cwd, fname)
+    local f = io.open(fpath, "r")
+    if f then
+      local ok, presets = pcall(vim.fn.json_decode, f:read("*a"))
+      f:close()
+      if ok and type(presets) == "table" then
+        local cp = (presets.configurePresets or {})[1]
+        if cp and cp.binaryDir then
+          -- binaryDir may contain ${sourceDir} macro — expand it.
+          local dir = cp.binaryDir:gsub("${sourceDir}", cwd)
+          if vim.fn.isdirectory(dir) == 1 then
+            return dir
+          end
+        end
+      end
+    end
+  end
+
+  -- 2. Scan common candidate directories for CMakeCache.txt.
+  local candidates =
+    { "build", "out", "cmake-build-debug", "cmake-build-release" }
+  for _, name in ipairs(candidates) do
+    local dir = vim.fs.joinpath(cwd, name)
+    if vim.fn.filereadable(vim.fs.joinpath(dir, "CMakeCache.txt")) == 1 then
+      return dir
+    end
+  end
+
+  -- 3. Default fallback.
+  return vim.fs.joinpath(cwd, "build")
+end
+
 --- Scan build/ for the first executable file produced by CMake.
 --- Fallback when the CMake File API reply is unavailable.
 ---@return string|nil # Absolute path to the first executable found, or nil.
 local function resolve_cmake_build_program()
-  local build = vim.fs.joinpath(vim.fn.getcwd(), "build")
+  local build = resolve_cmake_build_dir()
   for name, type in vim.fs.dir(build) do
     if type == "file" then
       local path = vim.fs.joinpath(build, name)
@@ -82,7 +126,7 @@ end
 --- Returns an empty table if the reply does not exist yet.
 ---@return string[] # Absolute paths to all EXECUTABLE targets in build/.
 local function resolve_cmake_targets()
-  local build = vim.fs.joinpath(vim.fn.getcwd(), "build")
+  local build = resolve_cmake_build_dir()
 
   -- Ensure query file exists for the next cmake configure (idempotent).
   local query_dir = vim.fs.joinpath(build, ".cmake", "api", "v1", "query")
@@ -244,7 +288,7 @@ local function select_launch_program()
 
   default = default
     or resolve_cmake_build_program()
-    or vim.fs.joinpath(vim.fn.getcwd(), "build", "/")
+    or resolve_cmake_build_dir()
 
   local path = input_launch_program(default)
   if path and path ~= "" then
