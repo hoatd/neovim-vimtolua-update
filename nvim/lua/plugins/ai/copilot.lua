@@ -1,13 +1,10 @@
 -- lua/plugins/ai/copilot.lua
 -- Copilot stack: copilot.lua + copilot-lsp (NES backend).
--- sidekick.nvim lives in ai/sidekick.lua (independent module).
 --
 -- Enable NES workflow:
 --   1. Set enabled = true on both specs below
 --   2. Set nes.enabled = true in copilot.lua opts
---   3. Install the LSP: :MasonInstall copilot-language-server
---      or: npm install -g @github/copilot-language-server
---   4. Sign in: :LspCopilotSignIn
+--   2. Sign in: :LspCopilotSignIn
 
 return {
   -- ============================================================
@@ -15,8 +12,7 @@ return {
   -- ============================================================
   {
     "zbirenbaum/copilot.lua",
-    enabled = false,
-    event = "InsertEnter",
+    enabled = true,
     config = function()
       local opts = {
         panel = {
@@ -40,7 +36,7 @@ return {
         },
         nes = {
           -- Set enabled = true together with copilot-lsp below
-          enabled = false,
+          enabled = true,
           auto_trigger = true,
           keymap = {
             accept_and_goto = "<M-g>",
@@ -49,18 +45,8 @@ return {
           },
         },
         -- GHE authentication endpoint (set nil for github.com)
-        auth_provider_url = "https://straumann.ghe.com/",
         -- auth_provider_url = nil,
-
-        -- Logging (uncomment to debug)
-        -- logger = {
-        --   file = vim.fn.stdpath("log") .. "/copilot-lua.log",
-        --   file_log_level = vim.log.levels.OFF,
-        --   print_log_level = vim.log.levels.WARN,
-        --   trace_lsp = "off",        -- "off" | "debug" | "verbose"
-        --   trace_lsp_progress = false,
-        --   log_lsp_messages = false,
-        -- },
+        auth_provider_url = "https://straumann.ghe.com/",
       }
       require("copilot").setup(opts)
     end,
@@ -72,8 +58,7 @@ return {
   -- ============================================================
   {
     "copilotlsp-nvim/copilot-lsp",
-    enabled = false,
-    dependencies = { "zbirenbaum/copilot.lua" },
+    enabled = true,
     config = function()
       require("copilot-lsp").setup({
         nes = {
