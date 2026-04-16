@@ -8,6 +8,7 @@
 local servers = {
   -- "bashls",
   -- "cmake",
+  -- "copilot",
   -- "gh_actions_ls",
   -- "html",
   -- "jsonls",
@@ -21,20 +22,10 @@ local servers = {
   -- "wasm_language_tools",
 }
 
--- Extra servers not in mason-lspconfig's registry (installed manually).
--- Install: :MasonInstall copilot-language-server
---       or: npm install -g @github/copilot-language-server
--- Sign in: :LspCopilotSignIn
--- local extra_servers = {
---   "copilot",
--- }
-
 -- ============================================================
 -- Per-server configuration overrides
 -- ============================================================
 local server_configs = {
-  -- clangd = {},
-  -- copilot = {},
   lua_ls = {
     settings = {
       Lua = {
@@ -45,19 +36,19 @@ local server_configs = {
           globals = { "vim" },
         },
         workspace = {
-          library = vim.list_extend(vim.api.nvim_get_runtime_file("", true),
-          -- Extend paths to below plugins to prevent some diagnostics messages
-          -- in the plugins/ai/opencode.lua relate lua annotations
-          {
-            vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
-            vim.fn.stdpath("data") .. "/lazy/opencode.nvim/lua",
-          }),
+          library = vim.list_extend(
+            vim.api.nvim_get_runtime_file("", true),
+            -- Extend paths to below plugins to prevent some diagnostics messages
+            -- in the plugins/ai/opencode.lua relate lua annotations
+            {
+              vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
+              vim.fn.stdpath("data") .. "/lazy/opencode.nvim/lua",
+            }
+          ),
         },
       },
     },
   },
-  -- pyright = {},
-  -- ts_ls = {},
 }
 
 -- ============================================================
@@ -162,28 +153,13 @@ return {
       -- capabilities.general = capabilities.general or {}
       -- capabilities.general.positionEncodings = { "utf-16" }
 
-      -- Configure and enable each managed server
-      local function configure(server_name)
+      for _, server_name in ipairs(servers) do
         local config = server_configs[server_name] or {}
         config.on_attach = on_attach
         config.capabilities = capabilities
         vim.lsp.config(server_name, config)
         vim.lsp.enable(server_name)
       end
-
-      for _, server_name in ipairs(servers) do
-        configure(server_name)
-      end
-
-      -- Extra servers (not in mason-lspconfig registry)
-      -- local def_caps = vim.lsp.protocol.make_client_capabilities()
-      -- for _, server_name in ipairs(extra_servers) do
-      --   local config = server_configs[server_name] or {}
-      --   config.on_attach = on_attach
-      --   config.capabilities = def_caps
-      --   vim.lsp.config(server_name, config)
-      --   vim.lsp.enable(server_name)
-      -- end
     end,
   },
 
