@@ -4,14 +4,6 @@
 -- Enable: set enabled = true below.
 
 return {
-  -- snacks.nvim: enhances opencode ask() and select() UI
-  -- optional dep in opencode spec below uses this if present
-  {
-    "folke/snacks.nvim",
-    enabled = true,
-    lazy = false,
-    priority = 1000,
-  },
   {
     "nickjvandyke/opencode.nvim",
     version = "*", -- Latest stable release

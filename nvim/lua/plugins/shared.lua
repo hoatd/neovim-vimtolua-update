@@ -24,6 +24,15 @@ return {
     opts = {},
   },
 
+  -- Snacks.nvim: UI enhancements (input, picker, terminal, …)
+  -- Used by opencode.nvim, sidekich.nvim,..., and other vim.ui.input; may be extended by other plugins.
+  {
+    "folke/snacks.nvim",
+    enabled = true,
+    lazy = false,
+    priority = 1000,
+  },
+
   -- File type icons (used by nvim-tree, lualine, tabby, etc.)
   {
     "nvim-tree/nvim-web-devicons",
