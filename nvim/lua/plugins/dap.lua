@@ -87,10 +87,27 @@ end
 ---@return string|nil # Confirmed executable path, or nil if cancelled.
 local function input_launch_program(default)
   local co = assert(coroutine.running())
+  -- Position cursor at the start of the basename so the user can press <C-k>
+  -- to delete just the filename and type a new one, keeping the directory.
+  -- Columns are 0-indexed; dirname length + 1 skips the trailing slash.
+  local basename_col = default and (#vim.fs.dirname(default) + 1) or 0
   vim.ui.input({
     prompt = "Executable: ",
     default = default,
     completion = "file",
+    win = {
+      footer = " <cr> launch   <esc> cancel ",
+      footer_pos = "center",
+      on_win = function(self)
+        -- vim.schedule defers until after snacks has written the default text
+        -- and issued startinsert!, both of which happen after Snacks.win().
+        vim.schedule(function()
+          if vim.api.nvim_win_is_valid(self.win) then
+            vim.api.nvim_win_set_cursor(self.win, { 1, basename_col })
+          end
+        end)
+      end,
+    },
   }, function(value)
     coroutine.resume(co, value)
   end)
