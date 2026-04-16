@@ -62,9 +62,9 @@ local function resolve_platform_aware_debugger_mi_mode()
 end
 
 --- Scan build/ for the first executable file produced by CMake.
---- Used to pre-fill the launch prompt so the user rarely needs to type.
+--- Fallback when the CMake File API reply is unavailable.
 ---@return string|nil # Absolute path to the first executable found, or nil.
-local function resolve_cmake_program()
+local function resolve_cmake_build_program()
   local build = vim.fs.joinpath(vim.fn.getcwd(), "build")
   for name, type in vim.fs.dir(build) do
     if type == "file" then
@@ -74,6 +74,89 @@ local function resolve_cmake_program()
       end
     end
   end
+end
+
+--- Resolve all EXECUTABLE targets via the CMake File API (cmake 3.14+).
+--- Silently creates the codemodel-v2 query file if missing so the reply is
+--- generated on the next cmake configure run (no reconfigure forced now).
+--- Returns an empty table if the reply does not exist yet.
+---@return string[] # Absolute paths to all EXECUTABLE targets in build/.
+local function resolve_cmake_targets()
+  local build = vim.fs.joinpath(vim.fn.getcwd(), "build")
+
+  -- Ensure query file exists for the next cmake configure (idempotent).
+  local query_dir = vim.fs.joinpath(build, ".cmake", "api", "v1", "query")
+  vim.fn.mkdir(query_dir, "p")
+  local qf = io.open(vim.fs.joinpath(query_dir, "codemodel-v2"), "a")
+  if qf then
+    qf:close()
+  end
+
+  -- Locate the reply index file.
+  local reply_dir = vim.fs.joinpath(build, ".cmake", "api", "v1", "reply")
+  local index_file
+  for name, ftype in vim.fs.dir(reply_dir) do
+    if ftype == "file" and name:match("^index%-.*%.json$") then
+      index_file = vim.fs.joinpath(reply_dir, name)
+      break
+    end
+  end
+  if not index_file then
+    return {}
+  end
+
+  -- Decode index → locate the codemodel reply file.
+  local index = vim.fn.json_decode(vim.fn.readfile(index_file))
+  local codemodel_file
+  for _, reply in ipairs((index.reply or {})) do
+    if reply.kind == "codemodel" then
+      codemodel_file = vim.fs.joinpath(reply_dir, reply.jsonFile)
+      break
+    end
+  end
+  if not codemodel_file then
+    return {}
+  end
+
+  -- Decode codemodel → collect EXECUTABLE targets.
+  local codemodel = vim.fn.json_decode(vim.fn.readfile(codemodel_file))
+  local config = (codemodel.configurations or {})[1] or {}
+  local targets = {}
+  for _, t in ipairs(config.targets or {}) do
+    local tdata = vim.fn.json_decode(
+      vim.fn.readfile(vim.fs.joinpath(reply_dir, t.jsonFile))
+    )
+    if tdata.type == "EXECUTABLE" then
+      table.insert(targets, vim.fs.joinpath(build, tdata.name))
+    end
+  end
+  return targets
+end
+
+--- Show a picker for multiple discovered CMake executable targets.
+--- Uses vim.ui.select (intercepted by snacks.nvim picker when enabled).
+--- Bridges the async callback to a synchronous return via coroutine
+--- yield/resume, matching the same pattern as input_launch_program.
+--- Pre-selects the first item via opts.snacks.on_show (snacks-specific;
+--- ignored by the native vim.ui.select fallback).
+---@param targets string[] List of absolute executable paths to choose from.
+---@return string|nil # Chosen path, or nil if cancelled.
+local function select_cmake_target(targets)
+  local co = assert(coroutine.running())
+  vim.ui.select(targets, {
+    prompt = "DAP executable",
+    format_item = function(path)
+      return vim.fs.basename(path)
+    end,
+    snacks = {
+      on_show = function(picker)
+        picker.list:move(1)
+      end,
+    },
+  }, function(choice)
+    coroutine.resume(co, choice)
+  end)
+  return coroutine.yield()
 end
 
 --- Prompt the user for a launch executable path via a floating input.
@@ -92,7 +175,7 @@ local function input_launch_program(default)
   -- Columns are 0-indexed; dirname length + 1 skips the trailing slash.
   local basename_col = default and (#vim.fs.dirname(default) + 1) or 0
   vim.ui.input({
-    prompt = "Executable: ",
+    prompt = "DAP executable: ",
     default = default,
     completion = "file",
     win = {
@@ -137,9 +220,10 @@ local function set_cached_launch_program(path)
   vim.g.dap_launch_cache = cache
 end
 
---- Resolve the launch executable via cache → cmake scan → user input.
+--- Resolve the launch executable via cache → CMake File API → build scan → user input.
 --- Cache: last confirmed path, re-validated as executable each time.
---- Cmake: scans build/ for the first executable file if cache is cold.
+--- File API: queries cmake targets (EXECUTABLE type); shows picker for multiple.
+--- Build scan: fallback shallow scan of build/ for executable files.
 --- Input: floating prompt pre-filled with the best candidate.
 ---@return string|nil # Confirmed executable path, or nil if cancelled.
 local function select_launch_program()
@@ -147,9 +231,21 @@ local function select_launch_program()
   if cached and vim.fn.executable(cached) ~= 1 then
     cached = nil
   end
+
   local default = cached
-    or resolve_cmake_program()
+  if not default then
+    local targets = resolve_cmake_targets()
+    if #targets == 1 then
+      default = targets[1]
+    elseif #targets > 1 then
+      default = select_cmake_target(targets)
+    end
+  end
+
+  default = default
+    or resolve_cmake_build_program()
     or vim.fs.joinpath(vim.fn.getcwd(), "build", "/")
+
   local path = input_launch_program(default)
   if path and path ~= "" then
     set_cached_launch_program(path)
