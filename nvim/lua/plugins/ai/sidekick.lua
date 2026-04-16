@@ -7,7 +7,7 @@
 return {
   {
     "folke/sidekick.nvim",
-    enabled = true,
+    enabled = false,
     event = "VeryLazy",
     config = function()
       -- Check lazy config (not package.loaded) so the result is correct
