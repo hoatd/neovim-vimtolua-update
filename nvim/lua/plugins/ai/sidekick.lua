@@ -1,17 +1,33 @@
 -- lua/plugins/ai/sidekick.lua
 -- sidekick.nvim: NES UI + CLI tools (Zellij mux backend).
 --
--- Enable independently of copilot.lua / copilot-lsp:
---   1. Set enabled = true below
---   2. Optionally enable nes.enabled = true if using NES workflow
+-- Works standalone; NES and copilot status are auto-enabled only when
+-- copilot.lua is configured and enabled in the lazy spec.
 
 return {
   {
     "folke/sidekick.nvim",
     enabled = true,
+    event = "VeryLazy",
     config = function()
+      -- Check lazy config (not package.loaded) so the result is correct
+      -- regardless of whether copilot has been loaded yet.
+      local has_copilot = false
+      local ok_lazy_config, lazy_config = pcall(require, "lazy.core.config")
+      if ok_lazy_config then
+        local spec_copilot = lazy_config.plugins["zbirenbaum/copilot.lua"]
+        has_copilot = spec_copilot ~= nil and spec_copilot.enabled ~= false
+      else
+        vim.schedule(function()
+          vim.notify(
+            "Sidekick: Failed loading lazy config for determining Copilot state",
+            vim.log.levels.WARN
+          )
+        end)
+      end
+
       require("sidekick").setup({
-        nes = { enabled = true },
+        nes = { enabled = has_copilot },
         cli = {
           mux = {
             backend = "zellij",
@@ -20,7 +36,7 @@ return {
           },
         },
         copilot = {
-          status = { enabled = true },
+          status = { enabled = has_copilot },
         },
       })
 
