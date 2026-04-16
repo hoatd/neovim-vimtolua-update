@@ -38,7 +38,10 @@ local function resolve_dap_package_from_mason_path(name)
 
   if not registry.is_installed(name) then
     vim.notify(
-      "Mason: package '" .. name .. "' not installed — run :MasonInstall " .. name,
+      "Mason: package '"
+        .. name
+        .. "' not installed — run :MasonInstall "
+        .. name,
       vim.log.levels.WARN
     )
     return nil
@@ -163,7 +166,8 @@ local adapters = {
     if not path then
       return nil
     end
-    local bin = vim.fn.has("win32") == 1 and "OpenDebugAD7.exe" or "OpenDebugAD7"
+    local bin = vim.fn.has("win32") == 1 and "OpenDebugAD7.exe"
+      or "OpenDebugAD7"
     return {
       type = "executable",
       command = vim.fs.joinpath(path, "extension", "debugAdapters", "bin", bin),
@@ -193,7 +197,10 @@ local configurations = {
   cppdbg = function()
     local dbg = resolve_platform_aware_debugger_mi_mode()
     if dbg.path == "" then
-      vim.notify("DAP: cppdbg (gdb/lldb) not found in PATH", vim.log.levels.WARN)
+      vim.notify(
+        "DAP: cppdbg (gdb/lldb) not found in PATH",
+        vim.log.levels.WARN
+      )
       return nil
     end
     return {
@@ -271,28 +278,97 @@ return {
       local opts = { noremap = true, silent = true }
 
       -- Function keys
-      map("n", "<F5>", dap.continue, vim.tbl_extend("force", opts, { desc = "Debug: start / continue" }))
-      map("n", "<F10>", dap.step_over, vim.tbl_extend("force", opts, { desc = "Debug: step over" }))
-      map("n", "<F11>", dap.step_into, vim.tbl_extend("force", opts, { desc = "Debug: step into" }))
-      map("n", "<F12>", dap.step_out, vim.tbl_extend("force", opts, { desc = "Debug: step out" }))
+      map(
+        "n",
+        "<F5>",
+        dap.continue,
+        vim.tbl_extend("force", opts, { desc = "Debug: start / continue" })
+      )
+      map(
+        "n",
+        "<F10>",
+        dap.step_over,
+        vim.tbl_extend("force", opts, { desc = "Debug: step over" })
+      )
+      map(
+        "n",
+        "<F11>",
+        dap.step_into,
+        vim.tbl_extend("force", opts, { desc = "Debug: step into" })
+      )
+      map(
+        "n",
+        "<F12>",
+        dap.step_out,
+        vim.tbl_extend("force", opts, { desc = "Debug: step out" })
+      )
 
       -- Leader equivalents
-      map("n", "<leader>xc", dap.continue, vim.tbl_extend("force", opts, { desc = "Debug: start / continue" }))
-      map("n", "<leader>xo", dap.step_over, vim.tbl_extend("force", opts, { desc = "Debug: step over" }))
-      map("n", "<leader>xi", dap.step_into, vim.tbl_extend("force", opts, { desc = "Debug: step into" }))
-      map("n", "<leader>xO", dap.step_out, vim.tbl_extend("force", opts, { desc = "Debug: step out" }))
+      map(
+        "n",
+        "<leader>xc",
+        dap.continue,
+        vim.tbl_extend("force", opts, { desc = "Debug: start / continue" })
+      )
+      map(
+        "n",
+        "<leader>xo",
+        dap.step_over,
+        vim.tbl_extend("force", opts, { desc = "Debug: step over" })
+      )
+      map(
+        "n",
+        "<leader>xi",
+        dap.step_into,
+        vim.tbl_extend("force", opts, { desc = "Debug: step into" })
+      )
+      map(
+        "n",
+        "<leader>xO",
+        dap.step_out,
+        vim.tbl_extend("force", opts, { desc = "Debug: step out" })
+      )
 
       -- Breakpoints
-      map("n", "<leader>b", dap.toggle_breakpoint, vim.tbl_extend("force", opts, { desc = "Debug: toggle breakpoint" }))
-      map("n", "<leader>B", dap.set_breakpoint, vim.tbl_extend("force", opts, { desc = "Debug: set breakpoint" }))
-      map("n", "<leader>bl", function()
-        dap.list_breakpoints()
-        vim.cmd("copen")
-      end, vim.tbl_extend("force", opts, { desc = "Debug: list breakpoints (quickfix)" }))
+      map(
+        "n",
+        "<leader>b",
+        dap.toggle_breakpoint,
+        vim.tbl_extend("force", opts, { desc = "Debug: toggle breakpoint" })
+      )
+      map(
+        "n",
+        "<leader>B",
+        dap.set_breakpoint,
+        vim.tbl_extend("force", opts, { desc = "Debug: set breakpoint" })
+      )
+      map(
+        "n",
+        "<leader>bl",
+        function()
+          dap.list_breakpoints()
+          vim.cmd("copen")
+        end,
+        vim.tbl_extend(
+          "force",
+          opts,
+          { desc = "Debug: list breakpoints (quickfix)" }
+        )
+      )
 
       -- Stack frame navigation
-      map("n", "]s", dap.down, vim.tbl_extend("force", opts, { desc = "Debug: next stack frame" }))
-      map("n", "[s", dap.up, vim.tbl_extend("force", opts, { desc = "Debug: previous stack frame" }))
+      map(
+        "n",
+        "]s",
+        dap.down,
+        vim.tbl_extend("force", opts, { desc = "Debug: next stack frame" })
+      )
+      map(
+        "n",
+        "[s",
+        dap.up,
+        vim.tbl_extend("force", opts, { desc = "Debug: previous stack frame" })
+      )
     end,
   },
 
