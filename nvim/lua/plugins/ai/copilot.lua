@@ -17,30 +17,50 @@ return {
       {
         "copilotlsp-nvim/copilot-lsp",
         init = function()
-          vim.g.copilot_nes_debounce = 100 -- Reduce NES request debounce (default: 500 ms)
+          vim.g.copilot_nes_debounce = 50 -- Reduce NES request debounce (default: 500 ms)
         end,
         config = function()
-          require("copilot-lsp").setup({
+          local ok_copilot_lsp, copilot_lsp = pcall(require, "copilot-lsp")
+          if not ok_copilot_lsp then
+            vim.schedule(function()
+              vim.notify(
+                "Copilot/NES: copilot-lsp not found: " .. copilot_lsp,
+                vim.log.levels.WARN
+              )
+            end)
+            return
+          end
+          copilot_lsp.setup({
             nes = {
               move_count_threshold = 3, -- clear suggestion after 3 cursor moves
             },
           })
 
-          local nes = require("copilot-lsp.nes")
+          local ok_copilot_lsp_nes, copilot_lsp_nes =
+            pcall(require, "copilot-lsp.nes")
+          if not ok_copilot_lsp_nes then
+            vim.schedule(function()
+              vim.notify(
+                "Copilot/NES: copilot-lsp.nes not found: " .. copilot_lsp_nes,
+                vim.log.levels.WARN
+              )
+            end)
+            return
+          end
 
           -- Jump to the start of the pending NES edit
           vim.keymap.set({ "n", "i" }, "<M-g>", function()
-            nes.walk_cursor_start_edit()
+            copilot_lsp_nes.walk_cursor_start_edit()
           end, { desc = "NES: jump to edit location" })
 
           -- Accept / apply the pending NES edit
           vim.keymap.set({ "n", "i" }, "<M-a>", function()
-            nes.apply_pending_nes()
+            copilot_lsp_nes.apply_pending_nes()
           end, { desc = "NES: accept edit" })
 
           -- Dismiss the pending NES edit
           vim.keymap.set({ "n", "i" }, "<M-x>", function()
-            nes.clear()
+            copilot_lsp_nes.clear()
           end, { desc = "NES: dismiss edit" })
         end,
       },
