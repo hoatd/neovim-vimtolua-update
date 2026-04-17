@@ -80,11 +80,10 @@ return {
             then
               cmp.hide()
               if not copilot_lsp_nes_loaded.walk_cursor_start_edit() then
-                return (
-                  copilot_lsp_nes_loaded.apply_pending_nes()
-                  and copilot_lsp_nes_loaded.walk_cursor_end_edit()
-                )
+                copilot_lsp_nes_loaded.apply_pending_nes()
+                copilot_lsp_nes_loaded.walk_cursor_end_edit()
               end
+              return true
             end
             if cmp.snippet_active() then
               return cmp.accept()
