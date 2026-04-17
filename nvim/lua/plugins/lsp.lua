@@ -41,6 +41,7 @@ local server_configs = {
             -- Extend paths to below plugins to prevent some diagnostics messages
             -- in the plugins/ai/opencode.lua relate lua annotations
             {
+              vim.fn.stdpath("data") .. "/lazy/blink.cmp/lua",
               vim.fn.stdpath("data") .. "/lazy/snacks.nvim/lua",
               vim.fn.stdpath("data") .. "/lazy/opencode.nvim/lua",
             }
