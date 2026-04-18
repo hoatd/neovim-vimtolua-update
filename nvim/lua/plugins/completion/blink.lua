@@ -98,6 +98,12 @@ return {
       completion = {
         ghost_text = { enabled = true, show_without_selection = true },
         documentation = { auto_show = true },
+        list = {
+          selection = {
+            preselect = true, -- auto-highlight first item when menu opens
+            auto_insert = false, -- don't insert text until you explicitly accept
+          },
+        },
         menu = {
           draw = {
             columns = {
