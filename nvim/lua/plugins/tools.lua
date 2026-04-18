@@ -19,6 +19,10 @@ return {
     "nvim-tree/nvim-tree.lua",
     enabled = true,
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+    end,
     opts = {},
   },
 
@@ -79,11 +83,7 @@ return {
         function()
           persistence.stop()
         end,
-        vim.tbl_extend(
-          "force",
-          opts,
-          { desc = "Stop persisting the session" }
-        )
+        vim.tbl_extend("force", opts, { desc = "Stop persisting the session" })
       )
     end,
   },
