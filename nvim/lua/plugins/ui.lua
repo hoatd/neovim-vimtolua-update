@@ -8,7 +8,7 @@ return {
   -- ============================================================
   {
     "Mofiqul/dracula.nvim",
-    enabled = true,
+    enabled = false, -- disabled: switched to catppuccin
     priority = 1000,
     lazy = false,
     config = function()
@@ -96,28 +96,77 @@ return {
   },
 
   -- ============================================================
+  -- Catppuccin colorscheme
+  -- ============================================================
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    enabled = true,
+    priority = 1000,
+    lazy = false,
+    opts = {
+      flavour = "latte", -- auto, latte, frappe, macchiato, mocha
+      dim_inactive = {
+        enabled = true,
+        shade = vim.o.background == "light" and "light" or "dark",
+        percentage = 0.15,
+      },
+      integrations = {
+        nvimtree = true,
+        treesitter = true,
+        gitsigns = true,
+        telescope = { enabled = true },
+        lazy = true,
+        which_key = true,
+        mason = true,
+        native_lsp = {
+          enabled = true,
+          underlines = {
+            errors = { "undercurl" },
+            hints = { "undercurl" },
+            warnings = { "undercurl" },
+            information = { "undercurl" },
+          },
+        },
+      },
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.opt.termguicolors = true
+      vim.cmd.colorscheme("catppuccin")
+    end,
+  },
+
+  -- ============================================================
   -- Lualine statusline
   -- ============================================================
   {
     "nvim-lualine/lualine.nvim",
     enabled = true,
     dependencies = {
-      "Mofiqul/dracula.nvim",
+      -- "Mofiqul/dracula.nvim", -- disabled: switched to catppuccin
+      "catppuccin/nvim", -- ensures catppuccin loads before lualine theme resolves
       "nvim-tree/nvim-web-devicons",
     },
-    opts = {
-      options = {
-        theme = "dracula-nvim",
-      },
-      sections = {
-        lualine_x = {
-          require("opencode").statusline,
-          "encoding",
-          "fileformat",
-          "filetype",
+    config = function()
+      require("lualine").setup({
+        options = {
+          -- theme = "dracula-nvim", -- disabled: switched to catppuccin
+          theme = "catppuccin-nvim", -- same as theme = "auto",
+          -- Able to specifiy another catppuccin theme for lualine by applying the coresponding name like below
+          -- theme = require("catppuccin.utils.lualine")(package.loaded["catppuccin"].options.flavour)
+          -- theme = require("catppuccin.utils.lualine")("latte")
         },
-      },
-    },
+        sections = {
+          lualine_x = {
+            require("opencode").statusline,
+            "encoding",
+            "fileformat",
+            "filetype",
+          },
+        },
+      })
+    end,
   },
 
   -- ============================================================
