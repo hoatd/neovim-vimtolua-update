@@ -31,10 +31,26 @@ return {
         hl(0, "DiagnosticHint", { fg = "#bd93f9" })
 
         -- Virtual text (italic + slightly softer for inline text)
-        hl(0, "DiagnosticVirtualTextError", { fg = "#ff5555", italic = true, nocombine = true })
-        hl(0, "DiagnosticVirtualTextWarn", { fg = "#f1fa8c", italic = true, nocombine = true })
-        hl(0, "DiagnosticVirtualTextInfo", { fg = "#8be9fd", italic = true, nocombine = true })
-        hl(0, "DiagnosticVirtualTextHint", { fg = "#bd93f9", italic = true, nocombine = true })
+        hl(
+          0,
+          "DiagnosticVirtualTextError",
+          { fg = "#ff5555", italic = true, nocombine = true }
+        )
+        hl(
+          0,
+          "DiagnosticVirtualTextWarn",
+          { fg = "#f1fa8c", italic = true, nocombine = true }
+        )
+        hl(
+          0,
+          "DiagnosticVirtualTextInfo",
+          { fg = "#8be9fd", italic = true, nocombine = true }
+        )
+        hl(
+          0,
+          "DiagnosticVirtualTextHint",
+          { fg = "#bd93f9", italic = true, nocombine = true }
+        )
 
         -- Underline colors
         hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#ff5555" })
@@ -64,7 +80,6 @@ return {
         transparent_bg = true,
         italic_comment = true,
       })
-      vim.opt.termguicolors = true
 
       -- Register before setting colorscheme so the autocmd fires on
       -- vim.cmd.colorscheme() below — no need for a separate explicit call.
@@ -75,6 +90,7 @@ return {
         desc = "Highlight overrides",
       })
 
+      vim.opt.termguicolors = true
       vim.cmd.colorscheme("dracula")
     end,
   },
