@@ -111,24 +111,7 @@ return {
         shade = vim.o.background == "light" and "light" or "dark",
         percentage = 0.15,
       },
-      integrations = {
-        nvimtree = true,
-        treesitter = true,
-        gitsigns = true,
-        telescope = { enabled = true },
-        lazy = true,
-        which_key = true,
-        mason = true,
-        native_lsp = {
-          enabled = true,
-          underlines = {
-            errors = { "undercurl" },
-            hints = { "undercurl" },
-            warnings = { "undercurl" },
-            information = { "undercurl" },
-          },
-        },
-      },
+      auto_integrations = true,
     },
     config = function(_, opts)
       require("catppuccin").setup(opts)
