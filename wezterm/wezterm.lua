@@ -4,8 +4,13 @@ local config = wezterm.config_builder()
 -- OS detection
 -- ============================================================
 local is_windows = wezterm.target_triple:find("windows") ~= nil
+
+local wsl_linux_distro = "NeovimAI-Ubuntu-24.04"
+
+config.default_prog = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" }
+
 -- ============================================================
--- Shell definitions — launch_menu only, default is $SHELL / system default
+-- Shell definitions — launch_menu only
 -- ============================================================
 if is_windows then
   config.launch_menu = {
@@ -39,6 +44,27 @@ if is_windows then
         -- by WezTerm so no extra shell quoting is needed — use plain single quotes.
         "Import-Module 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll'; "
           .. "Enter-VsDevShell 6e656755 -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'",
+      },
+    },
+    {
+      label = "WSL/Ubuntu Bash (Default)",
+      -- args = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" },
+      args = config.default_prog,
+    },
+    {
+      label = "WSL/Ubuntu Tmux",
+      args = { "wsl.exe", "-d", wsl_linux_distro, "--", "tmux" },
+    },
+    {
+      label = "WSL/Ubuntu Zellij",
+      args = {
+        "wsl.exe",
+        "-d",
+        wsl_linux_distro,
+        "--",
+        "bash",
+        "-lc",
+        "exec zellij",
       },
     },
   }
