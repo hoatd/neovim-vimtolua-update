@@ -118,28 +118,28 @@ config.keys = {
       title = "Select shell",
     }),
   },
-  -- Pane navigation: WezTerm-level CTRL+hjkl fallback for use outside Neovim.
-  -- Inside Neovim, wezterm.nvim owns these keys and calls the WezTerm RPC
-  -- directly — WezTerm never sees them when Neovim is focused, so no conflict.
-  {
-    key = "h",
-    mods = "CTRL",
-    action = wezterm.action.ActivatePaneDirection("Left"),
-  },
-  {
-    key = "j",
-    mods = "CTRL",
-    action = wezterm.action.ActivatePaneDirection("Down"),
-  },
-  {
-    key = "k",
-    mods = "CTRL",
-    action = wezterm.action.ActivatePaneDirection("Up"),
-  },
-  {
-    key = "l",
-    mods = "CTRL",
-    action = wezterm.action.ActivatePaneDirection("Right"),
-  },
+  -- -- Pane navigation: WezTerm-level CTRL+hjkl fallback for use outside Neovim.
+  -- -- Inside Neovim, wezterm.nvim owns these keys and calls the WezTerm RPC
+  -- -- directly — WezTerm never sees them when Neovim is focused, so no conflict.
+  -- {
+  --   key = "h",
+  --   mods = "CTRL",
+  --   action = wezterm.action.ActivatePaneDirection("Left"),
+  -- },
+  -- {
+  --   key = "j",
+  --   mods = "CTRL",
+  --   action = wezterm.action.ActivatePaneDirection("Down"),
+  -- },
+  -- {
+  --   key = "k",
+  --   mods = "CTRL",
+  --   action = wezterm.action.ActivatePaneDirection("Up"),
+  -- },
+  -- {
+  --   key = "l",
+  --   mods = "CTRL",
+  --   action = wezterm.action.ActivatePaneDirection("Right"),
+  -- },
 }
 return config
