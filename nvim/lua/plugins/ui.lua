@@ -105,7 +105,7 @@ return {
     priority = 1000,
     lazy = false,
     opts = {
-      flavour = "macchiato", -- auto, latte, frappe, macchiato, mocha
+      flavour = "latte", -- auto, latte, frappe, macchiato, mocha
       dim_inactive = {
         enabled = true,
         shade = vim.o.background == "light" and "light" or "dark",

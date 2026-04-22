@@ -71,7 +71,7 @@ config.hide_tab_bar_if_only_one_tab = false
 
 -- ============================================================
 -- Catppuccin color scheme
-config.color_scheme = "Catppuccin Macchiato" -- Latte, Macchiato, Mocha, Frappe
+config.color_scheme = "Catppuccin Latte" -- Latte, Macchiato, Mocha, Frappe
 -- ============================================================
 -- Kitty keyboard protocol — fixes Ctrl/Alt combos in Neovim
 -- ============================================================
