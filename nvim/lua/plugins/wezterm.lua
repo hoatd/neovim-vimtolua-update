@@ -5,7 +5,7 @@
 return {
   {
     "willothy/wezterm.nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
     config = function()
       if vim.env.TERM_PROGRAM ~= "WezTerm" then
@@ -26,57 +26,57 @@ return {
       end
       wezterm.setup({})
 
-      local map = vim.keymap.set
-      local opts = { noremap = true, silent = true }
-
-      map(
-        "n",
-        "<C-h>",
-        function()
-          wezterm.switch_pane.direction("Left")
-        end,
-        vim.tbl_extend(
-          "force",
-          opts,
-          { desc = "WezTerm: move to Left pane/split" }
-        )
-      )
-      map(
-        "n",
-        "<C-j>",
-        function()
-          wezterm.switch_pane.direction("Down")
-        end,
-        vim.tbl_extend(
-          "force",
-          opts,
-          { desc = "WezTerm: move to Down pane/split" }
-        )
-      )
-      map(
-        "n",
-        "<C-k>",
-        function()
-          wezterm.switch_pane.direction("Up")
-        end,
-        vim.tbl_extend(
-          "force",
-          opts,
-          { desc = "WezTerm: move to Up pane/split" }
-        )
-      )
-      map(
-        "n",
-        "<C-l>",
-        function()
-          wezterm.switch_pane.direction("Right")
-        end,
-        vim.tbl_extend(
-          "force",
-          opts,
-          { desc = "WezTerm: move to Right pane/split" }
-        )
-      )
+      -- local map = vim.keymap.set
+      -- local opts = { noremap = true, silent = true }
+      --
+      -- map(
+      --   "n",
+      --   "<C-h>",
+      --   function()
+      --     wezterm.switch_pane.direction("Left")
+      --   end,
+      --   vim.tbl_extend(
+      --     "force",
+      --     opts,
+      --     { desc = "WezTerm: move to Left pane/split" }
+      --   )
+      -- )
+      -- map(
+      --   "n",
+      --   "<C-j>",
+      --   function()
+      --     wezterm.switch_pane.direction("Down")
+      --   end,
+      --   vim.tbl_extend(
+      --     "force",
+      --     opts,
+      --     { desc = "WezTerm: move to Down pane/split" }
+      --   )
+      -- )
+      -- map(
+      --   "n",
+      --   "<C-k>",
+      --   function()
+      --     wezterm.switch_pane.direction("Up")
+      --   end,
+      --   vim.tbl_extend(
+      --     "force",
+      --     opts,
+      --     { desc = "WezTerm: move to Up pane/split" }
+      --   )
+      -- )
+      -- map(
+      --   "n",
+      --   "<C-l>",
+      --   function()
+      --     wezterm.switch_pane.direction("Right")
+      --   end,
+      --   vim.tbl_extend(
+      --     "force",
+      --     opts,
+      --     { desc = "WezTerm: move to Right pane/split" }
+      --   )
+      -- )
     end,
   },
 }
