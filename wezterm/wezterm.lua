@@ -90,10 +90,10 @@ local fonts = {
   caskaydia = wezterm.font("CaskaydiaMono Nerd Font Mono"),
 }
 config.font = fonts.jetbrains
-config.font_size = 13
+config.font_size = 12
 config.enable_tab_bar = true
 config.use_fancy_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
+config.hide_tab_bar_if_only_one_tab = true
 
 -- ============================================================
 -- Catppuccin color scheme
@@ -101,10 +101,6 @@ config.color_scheme = "Catppuccin Latte" -- Latte, Macchiato, Mocha, Frappe
 -- ============================================================
 -- Kitty keyboard protocol — fixes Ctrl/Alt combos in Neovim
 -- ============================================================
--- Let applications opt into enhanced keyboard reporting instead of forcing a
--- global encoding. Neovim 0.12+ probes for kitty support and enables it
--- itself; tools like opencode keep xterm-compatible input and still receive
--- shifted characters normally.
 config.enable_kitty_keyboard = true
 config.allow_win32_input_mode = false
 config.enable_csi_u_key_encoding = false
