@@ -6,20 +6,23 @@
 -- Mason-managed LSP servers
 -- ============================================================
 local servers = {
-  -- "bashls",
-  -- "cmake",
-  -- "copilot",
-  -- "gh_actions_ls",
-  -- "html",
-  -- "jsonls",
-  "lua_ls",
-  -- "marksman",
-  -- "protols",
-  -- "pyright",
-  -- "ts_ls",
+  "bashls",
   "clangd",
-  -- "vimls",
+  "cmake",
+  -- "copilot",
+  "gh_actions_ls",
+  "html",
+  "jsonls",
+  "lua_ls",
+  -- "markdown",
+  -- "markdown_inline",
+  "marksman",
+  "protols",
+  "pyright",
+  -- "ts_ls",
+  "vimls",
   -- "wasm_language_tools",
+  "yamlls",
 }
 
 -- ============================================================
