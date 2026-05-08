@@ -84,10 +84,6 @@ local display_opts = {
   linebreak = true, -- Wrap at convenient points
   breakindent = true, -- Indent wrapped lines to match start of original
   showbreak = "↳ ", -- Symbol for wrap prefix
-  colorcolumn = { -- Highlight column limits
-    "80", -- Common limit for code style (PEP8, etc.)
-    "120", -- Wider limit for modern displays / projects
-  },
   shortmess = { -- Avoid annoying likes 'hit enter to continue' messages
     "a", -- All abbreviations (most common flags)
     "t", -- Truncate file messages at start
