@@ -47,7 +47,7 @@ if is_windows then
         -- instance ID. The -Command string is passed as a single argv element
         -- by WezTerm so no extra shell quoting is needed — use plain single quotes.
         "Import-Module 'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll'; "
-          .. "Enter-VsDevShell 6e656755 -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'",
+        .. "Enter-VsDevShell 6e656755 -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'",
       },
     },
     {
@@ -77,7 +77,7 @@ else
 
   config.launch_menu = {
     { label = "bash", args = { "bash", "-l" } },
-    { label = "zsh", args = { "zsh", "-l" } },
+    { label = "zsh",  args = { "zsh", "-l" } },
   }
 end
 -- ============================================================
