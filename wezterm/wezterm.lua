@@ -7,12 +7,16 @@ local is_windows = wezterm.target_triple:find("windows") ~= nil
 
 local wsl_linux_distro = "NeovimAI-Ubuntu-24.04"
 
-config.default_prog = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" }
-
 -- ============================================================
 -- Shell definitions — launch_menu only
 -- ============================================================
 if is_windows then
+  -- config.default_prog = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" }
+  config.default_prog = {
+    label = "Command Prompt",
+    args = { "cmd.exe" },
+  }
+
   config.launch_menu = {
     {
       label = "Command Prompt",
@@ -69,6 +73,8 @@ if is_windows then
     },
   }
 else
+  config.default_prog = { label = "bash", args = { "bash", "-l" } }
+
   config.launch_menu = {
     { label = "bash", args = { "bash", "-l" } },
     { label = "zsh", args = { "zsh", "-l" } },
