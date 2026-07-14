@@ -12,10 +12,7 @@ local wsl_linux_distro = "NeovimAI-Ubuntu-24.04"
 -- ============================================================
 if is_windows then
   -- config.default_prog = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" }
-  config.default_prog = {
-    label = "Command Prompt",
-    args = { "cmd.exe" },
-  }
+  config.default_prog = { "cmd.exe" }
 
   config.launch_menu = {
     {
@@ -73,7 +70,7 @@ if is_windows then
     },
   }
 else
-  config.default_prog = { label = "bash", args = { "bash", "-l" } }
+  config.default_prog = { "bash", "-l" }
 
   config.launch_menu = {
     { label = "bash", args = { "bash", "-l" } },
