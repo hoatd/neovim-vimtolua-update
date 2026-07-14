@@ -49,8 +49,7 @@ if is_windows then
     },
     {
       label = "WSL/Ubuntu Bash (Default)",
-      -- args = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" },
-      args = config.default_prog,
+      args = { "wsl.exe", "-d", wsl_linux_distro, "--", "bash", "-l" },
     },
     {
       label = "WSL/Ubuntu Tmux",
