@@ -105,6 +105,9 @@ local function setup_keymaps(bufnr)
     vim.lsp.buf.code_action,
     vim.tbl_extend("force", opts, { desc = "Code action" })
   )
+  map("n", "<leader>lf", function()
+    vim.lsp.buf.format({ async = true })
+  end, vim.tbl_extend("force", opts, { desc = "Format buffer (LSP)" }))
 end
 
 -- ============================================================
@@ -122,10 +125,10 @@ local function on_attach(client, bufnr)
   vim.schedule(function()
     vim.notify(
       "LSP started for "
-        .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
-        .. " ("
-        .. client.name
-        .. ")",
+      .. utils.get_buffer_names(bufnr, { name = "[No Name]" }).name
+      .. " ("
+      .. client.name
+      .. ")",
       vim.log.levels.INFO
     )
   end)
